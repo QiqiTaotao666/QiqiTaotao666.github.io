@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>程序化植被工具 - 项目详情</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            transition: opacity 0.3s;
+        }
+
+        .back-btn:hover {
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .project-header {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .project-title {
+            font-size: 2.5em;
+            color: #1a1a2e;
+            margin-bottom: 15px;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            color: #666;
+        }
+
+        .meta-item span {
+            margin-left: 5px;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tag {
+            background: #1a1a2e;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .video-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .video-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .video-container video,
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #38b000 0%, #2d8a00 100%);
+            color: white;
+            font-size: 2em;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .content-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .content-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #1a1a2e;
+            border-bottom: 3px solid #1a1a2e;
+            padding-bottom: 10px;
+        }
+
+        .content-section h3 {
+            font-size: 1.4em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .content-section p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .content-section ul {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .content-section li {
+            font-size: 1.05em;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #38b000;
+        }
+
+        .feature-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .screenshots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .screenshot {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #38b000 0%, #2d8a00 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .links-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .link-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .link-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(26, 30, 46, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 2em;
+            }
+
+            .project-header,
+            .video-section,
+            .content-section {
+                padding: 25px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="back-btn">← 返回首页</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="project-header">
+            <h1 class="project-title">🌳 程序化植被工具</h1>
+            <div class="project-meta">
+                <div class="meta-item">📅 <span>2024年11月</span></div>
+                <div class="meta-item">🏢 <span>团队项目</span></div>
+                <div class="meta-item">⏱️ <span>开发周期：4个月</span></div>
+            </div>
+            <p style="font-size: 1.1em; line-height: 1.8; color: #555;">
+                基于Houdini开发的程序化植被生成和分布工具集。可以批量生成树木、灌木、花草等植被资产，并智能地分布到地形上。支持LOD自动生成、风场动画、季节变化等高级功能。将植被制作效率提升10倍以上。
+            </p>
+            <div class="project-tags">
+                <span class="tag">Houdini</span>
+                <span class="tag">Python</span>
+                <span class="tag">Unreal HDA</span>
+                <span class="tag">PCG</span>
+                <span class="tag">Foliage System</span>
+            </div>
+        </div>
+
+        <div class="video-section">
+            <h2>📹 工具演示</h2>
+            <div class="video-container">
+                <div class="video-placeholder">
+                    🎬
+                    <div style="font-size: 0.5em; max-width: 80%;">
+                        展示工具的操作流程<br>
+                        （从参数调节到最终效果）
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 项目介绍</h2>
+            <p>
+                在开放世界游戏开发中，植被资产的制作和摆放是一项耗时巨大的工作。传统方式需要美术手工制作每一株植物并逐个摆放，效率低下且难以调整。这套工具通过程序化技术解决了这个痛点，让美术团队可以快速迭代和大规模生产植被资产。
+            </p>
+
+            <h3>✨ 核心功能</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4>🌲 植被生成器</h4>
+                    <p>参数化生成树木、灌木、草本植物，支持形态变化和细节控制</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📐 LOD生成</h4>
+                    <p>自动生成多级LOD模型，优化渲染性能，保持视觉质量</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🗺️ 智能分布</h4>
+                    <p>基于地形、坡度、高度、biome规则智能分布植被</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🍂 季节系统</h4>
+                    <p>支持春夏秋冬四季变化，叶片颜色、密度动态调节</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🌬️ 风场动画</h4>
+                    <p>程序化生成风力影响，支持顶点动画和Shader动画</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔧 引擎集成</h4>
+                    <p>导出为Unreal HDA或Unity Prefab，无缝集成到项目</p>
+                </div>
+            </div>
+
+            <h3>🛠️ 技术实现</h3>
+            <ul>
+                <li><strong>L-System算法：</strong>使用L-System生成树木的分支结构，模拟真实植物生长规律</li>
+                <li><strong>程序化建模：</strong>在Houdini中搭建SOP网络，通过VEX编程控制几何体生成</li>
+                <li><strong>纹理烘焙：</strong>自动烘焙Albedo、Normal、AO等贴图，支持多材质</li>
+                <li><strong>Impostor技术：</strong>为远景植被生成Billboard，大幅降低面数</li>
+                <li><strong>VAT动画：</strong>将风场动画烘焙为顶点动画纹理（Vertex Animation Texture）</li>
+                <li><strong>Scatter系统：</strong>使用采样点云和权重贴图控制植被分布密度和种类</li>
+                <li><strong>Python工具：</strong>开发批处理脚本，实现一键导出和资产管理</li>
+            </ul>
+
+            <h3>💡 工作流优势</h3>
+            <ul>
+                <li><strong>效率提升：</strong>原本需要2周的植被制作现在只需半天</li>
+                <li><strong>易于迭代：</strong>修改参数即可重新生成，无需返工</li>
+                <li><strong>风格统一：</strong>所有植被遵循统一的制作规范和艺术风格</li>
+                <li><strong>性能友好：</strong>自动生成的LOD和Impostor确保运行时性能</li>
+                <li><strong>可重复性：</strong>保存参数预设，可以批量生成相似植被</li>
+                <li><strong>艺术控制：</strong>在程序化的基础上保留美术的创作自由度</li>
+            </ul>
+
+            <h3>🎯 使用场景</h3>
+            <ul>
+                <li><strong>开放世界游戏：</strong>快速填充大规模地形的植被覆盖</li>
+                <li><strong>建筑可视化：</strong>为建筑项目添加周边景观植物</li>
+                <li><strong>影视特效：</strong>生成CG森林、丛林等自然场景</li>
+                <li><strong>VR体验：</strong>创建沉浸式的自然环境</li>
+            </ul>
+
+            <h3>📊 项目成果</h3>
+            <p>
+                该工具已成功应用于团队的开放世界项目中，生成了超过200种植被资产，覆盖10平方公里的游戏地图。美术团队反馈工作效率大幅提升，可以将更多精力放在关键区域的精细化打磨上。
+            </p>
+            <p>
+                工具的模块化设计也让它具有很强的可扩展性，后续添加了岩石生成器、道路工具等功能，形成了完整的环境美术工具链。
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2>📸 工具展示</h2>
+            <div class="screenshots">
+                <div class="screenshot">
+                    🌲<br>
+                    树木生成器界面
+                </div>
+                <div class="screenshot">
+                    📐<br>
+                    LOD级别对比
+                </div>
+                <div class="screenshot">
+                    🗺️<br>
+                    地形分布预览
+                </div>
+                <div class="screenshot">
+                    🍂<br>
+                    四季变化效果
+                </div>
+                <div class="screenshot">
+                    🌬️<br>
+                    风场动画演示
+                </div>
+                <div class="screenshot">
+                    🎮<br>
+                    引擎内最终效果
+                </div>
+            </div>
+            <p style="margin-top: 15px; color: #666; font-size: 0.95em;">
+                💡 提示：可以添加工具的UI截图、参数面板、前后对比图等
+            </p>
+        </div>
+
+        <div class="links-section">
+            <a href="#" class="link-btn">📥 下载工具</a>
+            <a href="#" class="link-btn">📖 使用文档</a>
+            <a href="#" class="link-btn">🎓 教程视频</a>
+            <a href="index.html" class="link-btn">← 返回首页</a>
+        </div>
+    </div>
+</body>
+</html>
