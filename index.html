@@ -115,6 +115,40 @@
             color: #ffffff;
             margin-bottom: 15px;
             font-weight: 600;
+            min-height: 1.2em;
+        }
+
+        .name-switch {
+            display: inline-block;
+            position: relative;
+        }
+
+        .name-switch span {
+            display: inline-block;
+            animation: fadeSwitch 6s infinite;
+            position: absolute;
+            left: 0;
+            top: 0;
+            white-space: nowrap;
+            opacity: 0;
+        }
+
+        .name-switch span:nth-child(1) {
+            animation-delay: 0s;
+            position: relative;
+        }
+
+        .name-switch span:nth-child(2) {
+            animation-delay: 3s;
+        }
+
+        @keyframes fadeSwitch {
+            0%, 45% {
+                opacity: 1;
+            }
+            50%, 100% {
+                opacity: 0;
+            }
         }
 
         .profile-text .role {
@@ -149,6 +183,11 @@
         /* 分区标题 */
         .section {
             margin: 80px 0;
+        }
+
+        /* Education区域特殊间距 */
+        #education {
+            margin-top: 10px;
         }
 
         .section-title {
@@ -451,6 +490,7 @@
         <div class="nav-content">
             <a href="#" class="nav-logo">TA Portfolio</a>
             <ul class="nav-links">
+                <li><a href="#education">Education</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#skills">Skills</a></li>
@@ -465,7 +505,10 @@
             <div class="profile-section">
                 <img src="profile.jpg" alt="个人照片" class="profile-img">
                 <div class="profile-text">
-                    <h1>张三</h1>
+                    <h1 class="name-switch">
+                        <span>张涛</span>
+                        <span>Tao Zhang</span>
+                    </h1>
                     <div class="role">Technical Artist / Shader Artist</div>
                     <p class="bio">连接艺术与技术，为游戏和实时渲染创造视觉奇迹</p>
                     <div class="social-links">
@@ -477,13 +520,34 @@
             </div>
         </section>
 
+        <!-- 教育经历 -->
+        <section id="education" class="section">
+            <h2 class="section-title">Education</h2>
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div>
+                        <div class="company">🎓 佛山大学</div>
+                        <h3>数字媒体技术 | 本科</h3>
+                    </div>
+                    <div class="experience-date">2022.9 - 2026.6</div>
+                </div>
+                <div class="experience-content">
+                    <ul>
+                        <li>GPA: 3.13</li>
+                        <li>主修课程：素描、水彩、设计、表演、运动规律、3D动画、3D建模、影像基础、数字图像处理、高等数学、线性代数、C语言、C++、Python、数据结构、色彩构成、构图基础</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
         <!-- 关于我 -->
         <section id="about" class="section">
             <h2 class="section-title">About</h2>
             <div class="about-content">
-                <p>你好！我是一名技术美术，致力于连接艺术与技术，为游戏和实时渲染项目创造视觉奇迹。</p>
-                <p>拥有5年游戏行业经验，精通Shader编程、材质开发、特效制作和渲染管线优化。擅长使用Unreal Engine、Unity和Houdini等工具，将创意转化为高性能的视觉效果。</p>
-                <p>我热衷于研究前沿的渲染技术，优化性能与画质的平衡，并通过技术工具提升美术团队的工作效率。</p>
+                <p>你好！我是张涛，一名技术美术（TA），专注于架起艺术与技术的桥梁。</p>
+                <p><strong>核心能力：</strong>准确理解美术需求，将策划设定的美术风格转化为可落地的技术方案，擅长将画面质量从90分提升到95分。具备扎实的图形学基础和数学能力，精通Shader编程、材质开发和渲染管线优化。</p>
+                <p><strong>工作态度：</strong>学习能力强，吃苦耐劳，面对技术难题善于主动寻求解决方案，积极在技术社区学习交流。团队协作能力出色，能与美术、策划高效沟通，共同实现复杂视觉效果。</p>
+                <p><strong>个人特质：</strong>为人谦虚，乐观开朗，清晰认知自身不足并保持持续学习。具备自我驱动力，相信技术与艺术的结合是创造优秀作品的关键，并始终以此为职业目标。</p>
             </div>
         </section>
 
@@ -494,17 +558,19 @@
             <div class="experience-item">
                 <div class="experience-header">
                     <div>
-                        <div class="company">🎮 XX游戏公司</div>
-                        <h3>技术美术实习生 | Technical Artist Intern</h3>
+                        <div class="company">🎮 光子工作室 - 光子艺术部</div>
+                        <h3>技术美术 TA | Technical Artist</h3>
                     </div>
-                    <div class="experience-date">2024.06 - 2024.12</div>
+                    <div class="experience-date">2025.12 - 至今</div>
                 </div>
                 <div class="experience-content">
                     <ul>
-                        <li>参与开放世界RPG项目的材质与特效制作，开发了30+个PBR材质和20+个技能特效</li>
-                        <li>使用HLSL编写自定义Shader，实现水体、植被、角色溶解等特殊效果</li>
-                        <li>开发Python工具批量处理和优化场景资源，将材质加载时间减少40%</li>
-                        <li>协助优化渲染管线，通过合批和LOD策略使移动端帧率提升25%</li>
+                        <li><strong>参与项目：瓦罗兰特手游</strong></li>
+                        <li>负责瓦罗兰特手游商业化效果制作</li>
+                        <li>理解主美的美术要求并实现对应高品质的材质</li>
+                        <li>对材质性能优化，确保各个移动端平台能运行</li>
+                        <li>寻找提升美术品质的解决方案</li>
+                        <li>编写工具，方便美术制作美术资产</li>
                     </ul>
                 </div>
             </div>
@@ -512,17 +578,20 @@
             <div class="experience-item">
                 <div class="experience-header">
                     <div>
-                        <div class="company">🎬 XX影视工作室</div>
-                        <h3>实时渲染实习生 | Real-time Rendering Intern</h3>
+                        <div class="company">🎮 天美工作室 - J1工作室</div>
+                        <h3>技术美术 TA | Technical Artist</h3>
                     </div>
-                    <div class="experience-date">2023.12 - 2024.05</div>
+                    <div class="experience-date">2025.7 - 2025.12</div>
                 </div>
                 <div class="experience-content">
                     <ul>
-                        <li>使用Unreal Engine为虚拟制片项目搭建实时渲染场景</li>
-                        <li>制作程序化Houdini HDA工具，用于快速生成建筑和环境资产</li>
-                        <li>负责灯光设置和后期处理，确保虚拟场景与实拍素材无缝融合</li>
-                        <li>参与技术预演（Tech-Viz）流程，为导演提供实时画面预览</li>
+                        <li><strong>参与项目：QQ飞车端游、QQ飞车手游、预研项目</strong></li>
+                        <li>作为中台支援项目组的需求，修复项目运行中遇到的渲染BUG</li>
+                        <li>根据项目化特效优化的工作和交互功能的开发</li>
+                        <li>完成游戏旧有引擎向新引擎的材质效果升级，迁移公共函数库，查找相应的Shader</li>
+                        <li>完成预研游戏的场景相关材质效果制作</li>
+                        <li>制作商业化的材质表达</li>
+                        <li>为预研项目提供技术支持</li>
                     </ul>
                 </div>
             </div>
@@ -530,17 +599,38 @@
             <div class="experience-item">
                 <div class="experience-header">
                     <div>
-                        <div class="company">💡 独立项目</div>
-                        <h3>技术美术 | Personal Projects</h3>
+                        <div class="company">🎮 光子工作室 - 光环工作室</div>
+                        <h3>技术美术 TA | Technical Artist</h3>
                     </div>
-                    <div class="experience-date">2023.06 - Present</div>
+                    <div class="experience-date">2025.6 - 2025.7</div>
                 </div>
                 <div class="experience-content">
                     <ul>
-                        <li>开发并维护个人技术博客，分享Shader教程和渲染技术文章，累计阅读量10万+</li>
-                        <li>在GitHub开源多个Unity和Unreal插件工具，获得500+ stars</li>
-                        <li>参与多个Indie游戏项目的技术美术支持，负责视觉效果开发</li>
-                        <li>持续学习前沿渲染技术，包括光线追踪、Nanite、Lumen等</li>
+                        <li><strong>参与项目：预研二次元开放大世界游戏</strong></li>
+                        <li>负责修复预研游戏中遇到的渲染BUG</li>
+                        <li>负责人物相关的Shader的开发与优化</li>
+                        <li>设计并实现UE编辑器插件，自动化处理图资源批量替换，减少美术重复操作时间</li>
+                        <li>对接美术需求，开发PV对应的特效</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div>
+                        <div class="company">🎨 百度YY</div>
+                        <h3>技术美术 TA | Technical Artist</h3>
+                    </div>
+                    <div class="experience-date">2025.3 - 2025.5</div>
+                </div>
+                <div class="experience-content">
+                    <ul>
+                        <li><strong>参与项目：直播特效系统</strong></li>
+                        <li>为直播特效角色渲染和高表现Shader的开发</li>
+                        <li>完成角色SSSS效果开发并在项目自研引擎中与Unity中的效果进行对齐</li>
+                        <li>完成不同场景双套渲染流程的编号</li>
+                        <li>与引擎工程师一起解决项目中遇到的问题</li>
+                        <li>维护公用shader函数库，维护通用PBR管线</li>
                     </ul>
                 </div>
             </div>
@@ -574,63 +664,120 @@
                 <div class="category-header" onclick="toggleCategory(this)">
                     <div class="category-title">
                         <span>💎</span>
-                        <span>Material & Rendering<span class="category-count">4 projects</span></span>
+                        <span>Material & Rendering<span class="category-count">6 projects</span></span>
                     </div>
                     <span class="category-toggle">▼</span>
                 </div>
                 <div class="category-content">
                     <div class="portfolio-grid">
                         <a href="project1.html" class="portfolio-item">
-                            <div class="portfolio-img">💧</div>
+                            <div class="portfolio-img" style="background: none; padding: 0;">
+                                <img src="bodianPicture.png" alt="头发波点材质" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
                             <div class="portfolio-content">
-                                <h3>程序化水体系统</h3>
-                                <p>基于Gerstner波的真实水体模拟系统，支持实时反射、折射、焦散效果。包含泡沫、波纹、浅水深水过渡等细节。</p>
+                                <h3>头发波点材质</h3>
+                                <p>虚拟平面波点效果，挂载在角色头发上，实现呼吸流动的大小变化效果。</p>
                                 <div class="portfolio-tags">
-                                    <span class="tag">Unreal Engine</span>
+                                    <span class="tag">Unity</span>
                                     <span class="tag">HLSL Shader</span>
-                                    <span class="tag">Niagara VFX</span>
+                                    <span class="tag">Character Material</span>
                                 </div>
                             </div>
                         </a>
 
-                        <div class="portfolio-item">
-                            <div class="portfolio-img">✨</div>
+                        <a href="project2.html" class="portfolio-item">
+                            <div class="portfolio-img" style="background: none; padding: 0;">
+                                <img src="Pictures/shandian.png" alt="多层闪点材质" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
                             <div class="portfolio-content">
-                                <h3>PBR材质库</h3>
-                                <p>程序化生成的PBR材质库，包含金属、石材、布料等30+种材质。基于Substance Designer制作，参数可调。</p>
+                                <h3>多层闪点材质</h3>
+                                <p>复杂效果版本，有3层闪点，指令数84，可实现高密度闪点,通过细节图任意定制闪点图案，需配套贴图。</p>
                                 <div class="portfolio-tags">
-                                    <span class="tag">Substance Designer</span>
-                                    <span class="tag">PBR Workflow</span>
-                                    <span class="tag">Material Function</span>
+                                    <span class="tag">Unity</span>
+                                    <span class="tag">UE</span>
+                                    <span class="tag">HLSL Shader</span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
 
-                        <div class="portfolio-item">
-                            <div class="portfolio-img">⚡</div>
+                        <a href="project3.html" class="portfolio-item">
+                            <div class="portfolio-img" style="background: none; padding: 0;">
+                                <img src="Pictures/zhongmodi.png" alt="终末地类写实风格渲染" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
                             <div class="portfolio-content">
-                                <h3>角色溶解效果</h3>
-                                <p>高质量的角色死亡溶解Shader，支持边缘发光、粒子飘散、扭曲变形等效果。可配置多种溶解模式。</p>
+                                <h3>终末地类写实风格渲染</h3>
+                                <p>SDF与头发阴影的融合，PBR风格下的NPR，眼部球形折射，KK头发渲染模型，高饱和的后处理风格，果冻彩色的类油模材质。</p>
                                 <div class="portfolio-tags">
-                                    <span class="tag">Shader Programming</span>
-                                    <span class="tag">Vertex Animation</span>
-                                    <span class="tag">Alpha Erosion</span>
+                                    <span class="tag">NPR Rendering</span>
+                                    <span class="tag">PBR</span>
+                                    <span class="tag">Hair Shading</span>
+                                    <span class="tag">Post Processing</span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
 
-                        <div class="portfolio-item">
-                            <div class="portfolio-img">🌈</div>
+                        <a href="project4.html" class="portfolio-item">
+                            <div class="portfolio-img" style="background: none; padding: 0;">
+                                <img src="Pictures/meimanche.png" alt="美漫车材质" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
                             <div class="portfolio-content">
-                                <h3>全息投影Shader</h3>
-                                <p>科幻风格的全息投影效果，包含扫描线、故障效果、边缘发光。支持颜色和强度实时调节。</p>
+                                <h3>美漫车材质</h3>
+                                <p>复制LOD低模做夸张描边，基于深度的描边往灯光方向偏移，硬Noise做笔触感用Fresnel控制UV方向，屏幕空间下的素描线。</p>
                                 <div class="portfolio-tags">
-                                    <span class="tag">Custom Shader</span>
+                                    <span class="tag">NPR</span>
+                                    <span class="tag">Outline</span>
+                                    <span class="tag">Screen Space</span>
+                                    <span class="tag">Stylized</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="project5.html" class="portfolio-item">
+                            <div class="portfolio-img" style="background: none; padding: 0;">
+                                <img src="Pictures/liujinshui.png" alt="鎏金水材质" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div class="portfolio-content">
+                                <h3>鎏金水材质</h3>
+                                <p>十字星光效果，流动的金色水面反射，Noise驱动的波纹扰动，程序化粒子飘散，体积光与Bloom结合的神圣氛围。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">Stylized Material</span>
+                                    <span class="tag">Custom Lighting</span>
+                                    <span class="tag">Reflection Trick</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="project6.html" class="portfolio-item">
+                            <div class="portfolio-img" style="background: none; padding: 0;">
+                                <img src="Pictures/bodiantoushi.png" alt="透视波点材质" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div class="portfolio-content">
+                                <h3>透视波点材质</h3>
+                                <p>双Pass深度测试渲染遮挡效果，屏幕空间矫正保持波点视角稳定，Fresnel控制波点大小。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">Dual Pass</span>
+                                    <span class="tag">Depth Test</span>
                                     <span class="tag">Screen Space</span>
                                     <span class="tag">Fresnel</span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
+
+                        <a href="project7.html" class="portfolio-item">
+                            <div class="portfolio-img" style="background: none; padding: 0;">
+                                <img src="Pictures/moxingyun.png" alt="模型云材质" style="width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                            <div class="portfolio-content">
+                                <h3>模型云材质</h3>
+                                <p>3D Noise模拟云层层次感，SH存储全方向厚度图实现视角变化半透效果，厚度图快速次表面散射模拟，路面GPU Instance绒毛体积感。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">3D Noise</span>
+                                    <span class="tag">Spherical Harmonics</span>
+                                    <span class="tag">SSS</span>
+                                    <span class="tag">GPU Instancing</span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>

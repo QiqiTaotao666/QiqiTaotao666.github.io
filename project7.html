@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模型云材质 - 项目详情</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace, 'Microsoft YaHei', sans-serif;
+            line-height: 1.8;
+            color: #e0e0e0;
+            background: #0a0a0a;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #222;
+            padding: 20px 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            color: #00d9ff;
+            text-decoration: none;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        .back-btn:hover {
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 100px 40px 60px;
+        }
+
+        .project-header {
+            background: #111;
+            padding: 40px;
+            border-radius: 4px;
+            border-left: 3px solid #00d9ff;
+            margin-bottom: 30px;
+        }
+
+        .project-title {
+            font-size: 2.5em;
+            color: #ffffff;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tag {
+            background: rgba(0, 217, 255, 0.1);
+            color: #00d9ff;
+            padding: 8px 16px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            border: 1px solid rgba(0, 217, 255, 0.2);
+        }
+
+        .video-section {
+            background: #111;
+            padding: 40px;
+            border-radius: 4px;
+            border: 1px solid #222;
+            margin-bottom: 30px;
+        }
+
+        .video-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #000;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #222;
+        }
+
+        .video-container video,
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .placeholder-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #666;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        .content-section {
+            background: #111;
+            padding: 40px;
+            border-radius: 4px;
+            border: 1px solid #222;
+            margin-bottom: 30px;
+        }
+
+        .content-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #ffffff;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+
+        .content-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: #00d9ff;
+        }
+
+        .content-section h3 {
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: #00d9ff;
+        }
+
+        .content-section p {
+            font-size: 1.05em;
+            line-height: 1.8;
+            color: #b0b0b0;
+            margin-bottom: 15px;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .content-section li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 12px;
+            color: #999;
+            line-height: 1.7;
+            font-size: 1.05em;
+        }
+
+        .content-section li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: #00d9ff;
+            font-size: 1.2em;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            padding: 20px;
+            background: #0a0a0a;
+            border-radius: 4px;
+            border: 1px solid #222;
+            transition: border-color 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: #00d9ff;
+        }
+
+        .feature-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .feature-card p {
+            color: #888;
+            font-size: 0.95em;
+        }
+
+        .links-section {
+            background: #111;
+            padding: 30px;
+            border-radius: 4px;
+            border: 1px solid #222;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .link-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px 30px;
+            background: #0a0a0a;
+            color: #00d9ff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1em;
+            border: 1px solid #222;
+            transition: all 0.3s;
+        }
+
+        .link-btn:hover {
+            border-color: #00d9ff;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 80px 20px 40px;
+            }
+
+            .navbar .container {
+                padding: 0 20px;
+            }
+
+            .project-title {
+                font-size: 2em;
+            }
+
+            .project-header,
+            .video-section,
+            .content-section {
+                padding: 25px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="back-btn">← 返回首页</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="project-header">
+            <h1 class="project-title">模型云材质</h1>
+            <p style="font-size: 1.05em; line-height: 1.8; color: #b0b0b0; margin-bottom: 20px;">
+                3D Noise模拟云层层次感，SH存储全方向厚度图实现视角变化半透效果，厚度图快速次表面散射模拟，路面GPU Instance绒毛体积感。
+            </p>
+            <div class="project-tags">
+                <span class="tag">3D Noise</span>
+                <span class="tag">Spherical Harmonics</span>
+                <span class="tag">SSS</span>
+                <span class="tag">GPU Instancing</span>
+            </div>
+        </div>
+
+        <div class="video-section">
+            <h2>📹 演示视频</h2>
+            <div class="video-container">
+                <video controls autoplay loop muted controlsList="nodownload" allowfullscreen webkit-playsinline playsinline>
+                    <source src="videos/moxingyun.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 项目介绍</h2>
+            <p>
+                这是一个高级的体积云渲染系统，通过3D Noise、球谐函数、次表面散射和GPU实例化等多种技术的结合，打造出层次丰富、光照自然的风格化云朵效果。不仅云层本身具有真实的体积感和半透明质感，地面还使用类绒毛技术模拟出柔软的体积感，形成完整的风格化场景渲染方案。
+            </p>
+
+            <h3>✨ 核心特性</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4>🌫️ 3D Noise云层</h4>
+                    <p>使用3D Perlin Noise采样模拟云的层次结构，形成自然的体积感和深度变化</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔮 球谐厚度存储</h4>
+                    <p>利用球谐函数（SH）存储全方向厚度信息，实现随视角变化的动态半透明效果</p>
+                </div>
+                <div class="feature-card">
+                    <h4>💡 快速次表面散射</h4>
+                    <p>基于厚度图进行SSS近似计算，模拟光线穿透云层的柔和散射效果</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🌱 GPU Instance绒毛地面</h4>
+                    <p>使用GPU实例化技术大量渲染小草模型，类似绒毛做法，打造体积感地面</p>
+                </div>
+            </div>
+
+            <h3>🛠️ 技术实现</h3>
+            <ul>
+                <li><strong>3D Noise采样：</strong>在片段着色器中对3D Noise纹理进行多频率采样，叠加不同尺度的噪声形成云的层次结构</li>
+                <li><strong>密度场构建：</strong>通过Noise值控制云的密度分布，使用平滑阈值过滤形成云朵边缘的自然过渡</li>
+                <li><strong>球谐存储：</strong>预计算或实时计算全方向厚度，使用低阶球谐基函数（如4阶16系数）存储，大幅减少存储开销</li>
+                <li><strong>厚度查询：</strong>根据视线方向查询SH存储的厚度值，动态获取当前观察角度下云层的透光程度</li>
+                <li><strong>次表面散射：</strong>使用厚度图调制透射光颜色和强度，模拟光线穿过云层后的柔和散射效果</li>
+                <li><strong>边缘光照：</strong>结合Fresnel和厚度实现云边缘的高光效果，增强体积感</li>
+                <li><strong>GPU实例化：</strong>使用DrawInstancedIndirect批量渲染大量小草Mesh，每个实例带有随机位置、旋转和缩放</li>
+                <li><strong>绒毛Shader：</strong>草片使用双面渲染，配合透明度测试和风场动画，形成柔软的绒毛质感</li>
+            </ul>
+
+            <h3>💡 技术亮点</h3>
+            <ul>
+                <li><strong>物理准确：</strong>球谐存储全方向厚度，实现视角相关的真实半透明效果</li>
+                <li><strong>性能优化：</strong>SH低阶表示大幅减少存储和计算开销，GPU实例化高效渲染大量绒毛</li>
+                <li><strong>层次丰富：</strong>多频3D Noise叠加形成的云层具有细腻的层次和深度变化</li>
+                <li><strong>光照自然：</strong>次表面散射模拟让云层具有柔和的光线穿透效果</li>
+                <li><strong>风格统一：</strong>云层和地面绒毛的风格化处理相互呼应，形成完整的视觉语言</li>
+                <li><strong>动态表现：</strong>Noise可加入时间偏移实现云层飘动，草片可响应风场动画</li>
+            </ul>
+
+            <h3>🎨 视觉特点</h3>
+            <p>
+                云层呈现出蓬松柔软的质感，具有明显的层次感和深度变化。当光线照射时，云边缘会出现明亮的轮廓光，内部则有柔和的半透明效果。随着视角变化，云的透明度和亮度会动态调整，呈现出真实的体积感。地面的绒毛质感与云层形成呼应，整体画面柔和而富有层次，适合卡通、童话或风格化场景。
+            </p>
+
+            <h3>🎯 应用场景</h3>
+            <p>
+                该材质系统适用于卡通风格游戏的天空渲染、童话题材的梦幻场景、休闲游戏的柔和环境、移动游戏的低多边形场景等。云层技术可用于天空盒、飞行关卡、高空场景等，绒毛地面适用于草原、花园、卡通世界等场景。通过调节Noise频率和密度阈值，可以实现从稀疏积云到厚重层云的多种云层效果。
+            </p>
+        </div>
+
+        <div class="links-section">
+            <a href="index.html" class="link-btn">← 返回首页</a>
+        </div>
+    </div>
+
+    <canvas id="canvas-nest" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;"></canvas>
+
+    <script>
+        // 自定义粒子背景效果
+        (function() {
+            const canvas = document.getElementById('canvas-nest');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const particleCount = 120;
+            const lineDistance = 150;
+            const mouseRadius = 200;
+            
+            const mouse = {
+                x: null,
+                y: null
+            };
+            
+            // 监听鼠标移动
+            window.addEventListener('mousemove', function(e) {
+                mouse.x = e.x;
+                mouse.y = e.y;
+            });
+            
+            // 监听窗口大小变化
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+            
+            // 粒子类
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.radius = 2;
+                }
+                
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    
+                    // 边界检测
+                    if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+                    if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+                    
+                    // 鼠标吸引效果
+                    if (mouse.x && mouse.y) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < mouseRadius) {
+                            const force = (mouseRadius - distance) / mouseRadius;
+                            this.x += dx * force * 0.02;
+                            this.y += dy * force * 0.02;
+                        }
+                    }
+                }
+                
+                draw() {
+                    ctx.fillStyle = 'rgba(0, 217, 255, 0.6)';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            
+            // 创建粒子
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+            
+            // 绘制连线
+            function drawLines() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < lineDistance) {
+                            const opacity = (1 - distance / lineDistance) * 0.6;
+                            ctx.strokeStyle = `rgba(0, 217, 255, ${opacity})`;
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // 动画循环
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+                
+                drawLines();
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        })();
+    </script>
+</body>
+</html>
