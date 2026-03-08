@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>盘盘材质 - TA Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            color: #888;
+            text-decoration: none;
+            margin-bottom: 30px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .back-button:hover {
+            color: #fff;
+        }
+
+        .project-header {
+            margin-bottom: 50px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 30px;
+        }
+
+        .project-title {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.05);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .tag:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .video-section {
+            margin-bottom: 60px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .video-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .placeholder-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #444;
+            text-align: center;
+        }
+
+        .content-section {
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 30px;
+        }
+
+        .content-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #fff;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .content-section h3 {
+            font-size: 1.4em;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .content-section p {
+            color: #b0b0b0;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            color: #b0b0b0;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.8;
+        }
+
+        .content-section ul li:before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .content-section ul li strong {
+            color: #fff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.03);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-5px);
+        }
+
+        .feature-card h4 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .feature-card p {
+            color: #888;
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 2em;
+            }
+
+            .content-section {
+                padding: 25px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    
+    <div class="container">
+        <a href="index.html" class="back-button">← 返回主页</a>
+
+        <div class="project-header">
+            <h1 class="project-title">盘盘材质</h1>
+            <p style="font-size: 1.05em; line-height: 1.8; color: #b0b0b0; margin-bottom: 20px;">
+                移动端材质优化项目，复刻端游效果，矫正LDR/HDR在不同设备的表现差异，使用SDF字体技术保证低mip层级下的清晰度。
+            </p>
+            <div class="project-tags">
+                <span class="tag">Mobile Optimization</span>
+                <span class="tag">HDR/LDR</span>
+                <span class="tag">SDF Font</span>
+                <span class="tag">Cross-Platform</span>
+            </div>
+        </div>
+
+        <div class="video-section">
+            <h2>📹 演示视频</h2>
+            <div class="video-container">
+                <video autoplay loop muted controlsList="nodownload">
+                    <source src="videos/media15/panpan.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 项目介绍</h2>
+            <p>
+                这是一个针对移动端的材质优化项目，目标是将端游的高品质视觉效果移植到移动设备上。项目面临的主要挑战包括：复刻端游的复杂材质表现、解决LDR和HDR模式在不同手机硬件上的显示差异、以及在低分辨率mipmap层级下保持文字的清晰度。通过系统性的技术方案，成功在保证性能的前提下，实现了接近端游品质的移动端渲染效果，同时确保了在各种设备上的一致性体验。
+            </p>
+
+            <h3>✨ 核心特性</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4>🎮 端游效果复刻</h4>
+                    <p>精准还原端游材质表现，在移动端实现高品质视觉效果</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 HDR/LDR矫正</h4>
+                    <p>统一不同手机在HDR和LDR模式下的显示效果，消除设备差异</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔤 SDF字体技术</h4>
+                    <p>使用Signed Distance Field技术，确保字体在低mip层级下依然清晰锐利</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚡ 性能优化</h4>
+                    <p>针对移动端特性优化材质复杂度，平衡视觉质量与性能表现</p>
+                </div>
+            </div>
+
+            <h3>🛠️ 技术实现</h3>
+            <ul>
+                <li><strong>端游材质分析：</strong>深入研究端游材质的Shader代码，提取核心视觉特征</li>
+                <li><strong>移动端简化：</strong>保留关键视觉效果，移除或简化移动端不支持或性能开销大的特性</li>
+                <li><strong>HDR检测：</strong>在运行时检测设备是否支持HDR显示以及当前色彩空间</li>
+                <li><strong>色彩空间转换：</strong>实现LDR和HDR之间的色彩空间转换算法</li>
+                <li><strong>亮度映射：</strong>为HDR和LDR模式设计不同的Tone Mapping曲线，统一视觉效果</li>
+                <li><strong>设备特性数据库：</strong>建立不同手机型号的显示特性数据，进行针对性矫正</li>
+                <li><strong>SDF字体生成：</strong>使用工具将常规字体转换为SDF纹理</li>
+                <li><strong>SDF采样Shader：</strong>编写特殊的Shader对SDF纹理进行采样和渲染</li>
+                <li><strong>动态阈值调整：</strong>根据mip层级和距离动态调整SDF的渲染阈值</li>
+                <li><strong>抗锯齿优化：</strong>利用SDF的梯度信息实现高质量的边缘抗锯齿</li>
+                <li><strong>多设备测试：</strong>在不同品牌、型号的移动设备上进行效果验证和微调</li>
+            </ul>
+
+            <h3>💡 技术亮点</h3>
+            <ul>
+                <li><strong>端转手高保真：</strong>在性能受限的移动端实现接近端游的视觉品质</li>
+                <li><strong>跨设备一致性：</strong>解决不同手机硬件差异导致的显示不一致问题</li>
+                <li><strong>SDF无损缩放：</strong>字体在任意距离和mip层级下都能保持清晰锐利</li>
+                <li><strong>智能色彩管理：</strong>自动适配HDR/LDR模式，无需手动调整</li>
+                <li><strong>性能友好：</strong>所有优化方案都充分考虑移动端性能约束</li>
+                <li><strong>可维护性强：</strong>参数化设计，方便后续调整和不同项目复用</li>
+            </ul>
+
+            <h3>🎨 视觉特点</h3>
+            <p>
+                移动端呈现出与端游高度一致的材质质感和光照效果，无论玩家使用的是支持HDR的高端旗舰机，还是仅支持LDR的中低端设备，都能获得统一的视觉体验。界面中的文字在各种距离下都清晰可读，不会因为远处mipmap分辨率降低而变得模糊不清。SDF字体技术带来的锐利边缘和平滑曲线，使得UI文字具有矢量图形般的品质。整体画面在保证流畅帧率的前提下，达到了移动端的顶级视觉水准，成功将端游体验移植到了手机平台。
+            </p>
+
+        </div>
+    </div>
+
+    <script>
+        // Canvas粒子背景动画
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 80;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 1.5 + 0.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // 绘制连接线
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 120) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 * (1 - distance / 120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

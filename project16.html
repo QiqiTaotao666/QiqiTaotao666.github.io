@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mip层级指定DDS生成器 - TA Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            color: #888;
+            text-decoration: none;
+            margin-bottom: 30px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .back-button:hover {
+            color: #fff;
+        }
+
+        .project-header {
+            margin-bottom: 50px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 30px;
+        }
+
+        .project-title {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.05);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .tag:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .video-section {
+            margin-bottom: 60px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .video-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .placeholder-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #444;
+            text-align: center;
+        }
+
+        .content-section {
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 30px;
+        }
+
+        .content-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #fff;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .content-section h3 {
+            font-size: 1.4em;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .content-section p {
+            color: #b0b0b0;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            color: #b0b0b0;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.8;
+        }
+
+        .content-section ul li:before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .content-section ul li strong {
+            color: #fff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.03);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-5px);
+        }
+
+        .feature-card h4 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .feature-card p {
+            color: #888;
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 2em;
+            }
+
+            .content-section {
+                padding: 25px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    
+    <div class="container">
+        <a href="index.html" class="back-button">← 返回主页</a>
+
+        <div class="project-header">
+            <h1 class="project-title">Mip层级指定DDS生成器</h1>
+            <p style="font-size: 1.05em; line-height: 1.8; color: #b0b0b0; margin-bottom: 20px;">
+                自定义工具允许手动指定每个Mip层级的图片内容，解决引擎中LUT图采样错误和远处细节丢失等Mipmap问题。
+            </p>
+            <div class="project-tags">
+                <span class="tag">Tool Development</span>
+                <span class="tag">DDS Format</span>
+                <span class="tag">Mipmap Control</span>
+                <span class="tag">Texture Optimization</span>
+            </div>
+        </div>
+
+        <div class="video-section">
+            <h2>📸 工具界面与效果展示</h2>
+            <div style="display: grid; gap: 20px; margin-top: 20px;">
+                <div style="background: #000; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+                    <img src="Pictures/mip1.png" alt="Mip层级指定界面" style="width: 100%; height: auto; display: block;">
+                </div>
+                <div style="background: #000; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+                    <img src="Pictures/mip2.png" alt="Mip层级效果对比" style="width: 100%; height: auto; display: block;">
+                </div>
+                <div style="background: #000; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+                    <img src="Pictures/Mip3.png" alt="DDS生成结果" style="width: 100%; height: auto; display: block;">
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 项目介绍</h2>
+            <p>
+                这是一个专门用于生成自定义Mipmap层级DDS纹理的工具。传统的DDS生成工具会自动降采样生成Mipmap链，但在某些特殊场景下会产生问题：LUT（色彩查找表）在远处被错误地降采样导致颜色失真，精细纹理在远处的Mip层级丢失关键细节。本工具允许美术人员手动为每个Mip层级指定不同的图片内容，完全掌控Mipmap链的每一层，从而解决引擎自动生成Mip时的各种视觉问题，确保纹理在不同距离下都能呈现正确的效果。
+            </p>
+
+            <h3>✨ 核心特性</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4>🎯 自定义Mip层级</h4>
+                    <p>手动为每个Mipmap层级指定独立的图片内容，完全控制降采样效果</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎨 LUT图优化</h4>
+                    <p>解决色彩查找表在低Mip层级被错误采样导致的颜色失真问题</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔍 细节保留</h4>
+                    <p>在远距离Mip层级保留关键视觉细节，避免自动降采样的模糊和丢失</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📦 标准DDS输出</h4>
+                    <p>生成标准格式的DDS文件，兼容各类游戏引擎和渲染管线</p>
+                </div>
+            </div>
+
+            <h3>🛠️ 技术实现</h3>
+            <ul>
+                <li><strong>DDS格式研究：</strong>深入研究DDS文件格式规范，理解Mipmap链的存储结构</li>
+                <li><strong>文件结构解析：</strong>实现DDS文件头、像素格式、Mip层级数据的读写功能</li>
+                <li><strong>多图片输入：</strong>设计UI界面支持用户导入多张不同分辨率的图片，对应不同Mip层级</li>
+                <li><strong>分辨率验证：</strong>自动验证每个Mip层级图片的分辨率是否符合2的幂次递减规律</li>
+                <li><strong>格式转换：</strong>支持将常见图片格式（PNG、TGA、BMP等）转换为DDS所需的像素数据</li>
+                <li><strong>压缩选项：</strong>提供BC1-BC7等多种压缩格式选项，平衡质量和文件大小</li>
+                <li><strong>LUT特殊处理：</strong>针对LUT图提供专门模式，确保每个Mip层级保持原始查找表数据</li>
+                <li><strong>预览功能：</strong>在生成前预览每个Mip层级的内容，确保符合预期</li>
+                <li><strong>批量处理：</strong>支持批量生成多个DDS文件，提高工作流效率</li>
+            </ul>
+
+            <h3>💡 技术亮点</h3>
+            <ul>
+                <li><strong>解决引擎痛点：</strong>针对性解决UE等引擎自动Mip生成的视觉问题</li>
+                <li><strong>完全可控：</strong>美术可以精确控制每个Mip层级的视觉效果</li>
+                <li><strong>LUT图修复：</strong>彻底解决色彩查找表在不同距离下的采样错误</li>
+                <li><strong>细节优化：</strong>远处Mip层级可以手动强化关键细节，改善视觉表现</li>
+                <li><strong>工作流友好：</strong>直观的界面设计，无需了解DDS格式细节即可使用</li>
+                <li><strong>标准兼容：</strong>生成的DDS文件完全符合DirectX标准，通用性强</li>
+            </ul>
+
+            <h3>🎨 应用场景</h3>
+            <p>
+                <strong>LUT色彩查找表：</strong>游戏中使用的LUT图在远处被自动降采样后，颜色映射会出现严重错误。使用本工具为每个Mip层级指定完整的LUT数据，确保任何距离下颜色查找都准确无误。
+            </p>
+            <p>
+                <strong>精细纹理优化：</strong>对于包含重要细节的纹理（如文字、图标、花纹），在远距离Mip层级手动强化关键特征，避免自动模糊导致的细节丢失，保持远近都清晰可辨。
+            </p>
+            <p>
+                <strong>特殊视觉效果：</strong>某些特效纹理需要在不同距离呈现不同的视觉效果，通过自定义Mip可以实现距离相关的纹理变化，创造独特的视觉表现。
+            </p>
+
+        </div>
+    </div>
+
+    <script>
+        // Canvas粒子背景动画
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 80;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 1.5 + 0.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // 绘制连接线
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 120) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 * (1 - distance / 120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

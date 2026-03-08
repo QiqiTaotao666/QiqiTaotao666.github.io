@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>战争迷雾材质 - TA Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            color: #888;
+            text-decoration: none;
+            margin-bottom: 30px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .back-button:hover {
+            color: #fff;
+        }
+
+        .project-header {
+            margin-bottom: 50px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 30px;
+        }
+
+        .project-title {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.05);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .tag:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .video-section {
+            margin-bottom: 60px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .video-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .placeholder-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #444;
+            text-align: center;
+        }
+
+        .content-section {
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 30px;
+        }
+
+        .content-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #fff;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .content-section h3 {
+            font-size: 1.4em;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .content-section p {
+            color: #b0b0b0;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            color: #b0b0b0;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.8;
+        }
+
+        .content-section ul li:before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .content-section ul li strong {
+            color: #fff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.03);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-5px);
+        }
+
+        .feature-card h4 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .feature-card p {
+            color: #888;
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 2em;
+            }
+
+            .content-section {
+                padding: 25px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    
+    <div class="container">
+        <a href="index.html" class="back-button">← 返回主页</a>
+
+        <div class="project-header">
+            <h1 class="project-title">战争迷雾材质</h1>
+            <p style="font-size: 1.05em; line-height: 1.8; color: #b0b0b0; margin-bottom: 20px;">
+                GPU并行计算战争迷雾，收集3张RT写入场景信息，材质对视野方向进行类Raymarching操作判断遮挡。
+            </p>
+            <div class="project-tags">
+                <span class="tag">GPU Compute</span>
+                <span class="tag">Render Target</span>
+                <span class="tag">Raymarching</span>
+                <span class="tag">FOW</span>
+            </div>
+        </div>
+
+        <div class="video-section">
+            <h2>📹 演示视频</h2>
+            <div class="video-container">
+                <video controls autoplay loop muted controlsList="nodownload" allowfullscreen webkit-playsinline playsinline>
+                    <source src="videos/zhanzhengmiwu.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 项目介绍</h2>
+            <p>
+                这是一个基于GPU并行计算的战争迷雾系统（Fog of War）。通过多张Render Target收集场景信息，结合材质中的Raymarching算法进行视野遮挡判断，实现了高性能的实时战争迷雾效果。系统可以精确表现出被建筑或地形遮挡的区域，适用于RTS、MOBA等需要战争迷雾的策略类游戏。
+            </p>
+
+            <h3>✨ 核心特性</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4>⚡ GPU并行计算</h4>
+                    <p>利用GPU的并行处理能力，在Compute Shader中高效计算战争迷雾状态，大幅提升性能</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 多RT信息收集</h4>
+                    <p>通过3张Render Target分别存储高度、视野、遮挡等场景信息，为迷雾计算提供数据基础</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔍 Raymarching遮挡检测</h4>
+                    <p>在材质中对视野方向进行类Raymarching操作，精确判断视线是否被建筑或地形遮挡</p>
+                </div>
+            </div>
+
+            <h3>🛠️ 技术实现</h3>
+            <ul>
+                <li><strong>Render Target 1 - 高度图：</strong>渲染场景的高度信息，用于判断地形和建筑物的垂直遮挡关系</li>
+                <li><strong>Render Target 2 - 视野图：</strong>存储单位的可见范围，通过距离衰减和角度范围计算每个单位的视野区域</li>
+                <li><strong>Render Target 3 - 遮挡图：</strong>记录场景中的遮挡物信息，包括建筑、山体等静态遮挡物的位置</li>
+                <li><strong>Compute Shader：</strong>使用GPU并行计算每个像素的迷雾状态，处理多个单位的视野叠加和遮挡判断</li>
+                <li><strong>类Raymarching算法：</strong>在材质中沿视野方向进行步进采样，检测视线路径上是否存在遮挡物</li>
+                <li><strong>遮挡判断逻辑：</strong>比较视线路径上的高度值与遮挡图，判断视线是否被阻挡，计算可见度</li>
+                <li><strong>迷雾状态管理：</strong>维护未探索、已探索但不可见、当前可见三种状态，实现平滑的状态过渡</li>
+                <li><strong>性能优化：</strong>使用半精度浮点、纹理压缩、区域更新等技术降低内存和计算开销</li>
+            </ul>
+
+            <h3>💡 技术亮点</h3>
+            <ul>
+                <li><strong>高效并行计算：</strong>充分利用GPU并行能力，单帧可处理大量单位的视野计算</li>
+                <li><strong>精确遮挡检测：</strong>基于Raymarching的遮挡判断准确度高，能正确处理复杂地形和建筑遮挡</li>
+                <li><strong>多状态管理：</strong>支持未探索、迷雾、可见三种状态，提供丰富的战术信息</li>
+                <li><strong>实时更新：</strong>视野和遮挡信息实时更新，响应单位移动和视野变化</li>
+                <li><strong>可扩展性强：</strong>RT数量和采样步数可调节，可根据性能需求灵活配置</li>
+                <li><strong>低内存占用：</strong>使用纹理存储和压缩技术，即使在大地图下也能保持低内存使用</li>
+            </ul>
+
+            <h3>🎨 视觉特点</h3>
+            <p>
+                战争迷雾呈现出清晰的视野边界和平滑的过渡效果。未探索区域完全黑暗，已探索但不可见的区域显示为半透明灰色，当前可见区域完全清晰。遮挡边缘处理细腻，建筑和地形投射的阴影区域准确表现，视野边缘带有柔和的渐变，避免了生硬的切边。整体视觉效果专业且符合策略游戏的战术需求。
+            </p>
+
+        </div>
+    </div>
+
+    <script>
+        // Canvas粒子背景动画
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 80;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 1.5 + 0.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // 绘制连接线
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 120) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 * (1 - distance / 120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

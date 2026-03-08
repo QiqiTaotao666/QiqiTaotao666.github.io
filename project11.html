@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>元素水球 - TA Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            color: #888;
+            text-decoration: none;
+            margin-bottom: 30px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .back-button:hover {
+            color: #fff;
+        }
+
+        .project-header {
+            margin-bottom: 50px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 30px;
+        }
+
+        .project-title {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.05);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .tag:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .video-section {
+            margin-bottom: 60px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .video-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .placeholder-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: #444;
+            text-align: center;
+        }
+
+        .content-section {
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 30px;
+        }
+
+        .content-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #fff;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .content-section h3 {
+            font-size: 1.4em;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .content-section p {
+            color: #b0b0b0;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            color: #b0b0b0;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.8;
+        }
+
+        .content-section ul li:before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .content-section ul li strong {
+            color: #fff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.03);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-5px);
+        }
+
+        .feature-card h4 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .feature-card p {
+            color: #888;
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 2em;
+            }
+
+            .content-section {
+                padding: 25px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    
+    <div class="container">
+        <a href="index.html" class="back-button">← 返回主页</a>
+
+        <div class="project-header">
+            <h1 class="project-title">元素水球</h1>
+            <p style="font-size: 1.05em; line-height: 1.8; color: #b0b0b0; margin-bottom: 20px;">
+                程序化水材质表现，顶点动画驱动球体流动，Houdini生成环绕曲面装饰，LookDev搭建完整视觉呈现。
+            </p>
+            <div class="project-tags">
+                <span class="tag">Water Material</span>
+                <span class="tag">Vertex Animation</span>
+                <span class="tag">Houdini</span>
+                <span class="tag">LookDev</span>
+            </div>
+        </div>
+
+        <div class="video-section">
+            <h2>📹 演示视频</h2>
+            <div class="video-container">
+                <video autoplay loop muted controlsList="nodownload">
+                    <source src="videos/media11/yuansushuiqiu.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 项目介绍</h2>
+            <p>
+                这是一个展示元素水球视觉效果的完整作品。项目结合了程序化水材质、顶点动画、Houdini几何生成和LookDev流程，实现了一个充满动态感和艺术表现力的元素水球效果。水球表面呈现出流动的水纹和反射，球体形态通过顶点动画产生自然的律动感，周围装饰有Houdini生成的环绕曲面元素，整体通过精心的LookDev搭建呈现出高品质的视觉效果。
+            </p>
+
+            <h3>✨ 核心特性</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4>💧 水材质表现</h4>
+                    <p>程序化水材质，包含折射、反射、菲涅尔效果，通过法线扰动和流动贴图实现真实的水面质感</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🌊 顶点动画</h4>
+                    <p>基于Noise驱动的顶点动画，球体表面产生自然的波动和起伏，模拟水球的流动特性</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔮 Houdini环绕曲面</h4>
+                    <p>使用Houdini程序化生成环绕水球的装饰几何体，增强视觉层次和艺术表现力</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎨 LookDev搭建</h4>
+                    <p>完整的LookDev流程，包括灯光设置、材质调整、后期处理，打造高品质的最终呈现</p>
+                </div>
+            </div>
+
+            <h3>🛠️ 技术实现</h3>
+            <ul>
+                <li><strong>水材质基础：</strong>基于PBR的水材质，配置合理的粗糙度、金属度和折射率参数</li>
+                <li><strong>法线扰动：</strong>使用多层滚动Noise贴图扰动法线，制造流动的水波纹理</li>
+                <li><strong>菲涅尔反射：</strong>通过Fresnel计算视角相关的反射强度，边缘反射更强</li>
+                <li><strong>顶点偏移：</strong>在Vertex Shader中使用3D Noise对顶点位置进行偏移，产生球体形变</li>
+                <li><strong>动画驱动：</strong>通过时间参数驱动Noise偏移，实现顶点的连续流动动画</li>
+                <li><strong>Houdini几何生成：</strong>使用Houdini创建程序化的环绕曲面，可能使用L-System、VDB或VEX生成</li>
+                <li><strong>几何导出：</strong>将Houdini生成的几何体导出为FBX或Alembic格式，导入到渲染引擎</li>
+                <li><strong>灯光布置：</strong>设置主光、补光和轮廓光，突出水球的透明和反射特性</li>
+                <li><strong>环境光照：</strong>使用HDRI环境贴图提供真实的反射和环境照明</li>
+            </ul>
+
+            <h3>💡 技术亮点</h3>
+            <ul>
+                <li><strong>真实水材质：</strong>基于物理的水材质表现，折射和反射效果自然真实</li>
+                <li><strong>流畅顶点动画：</strong>Noise驱动的顶点动画流畅自然，没有突兀的形变</li>
+                <li><strong>程序化生成：</strong>Houdini程序化几何生成，可快速迭代和调整设计</li>
+                <li><strong>完整LookDev：</strong>从材质到灯光到后期的完整视觉开发流程</li>
+                <li><strong>艺术表现力：</strong>技术服务于艺术，整体视觉效果充满魔幻和元素感</li>
+                <li><strong>可复用性：</strong>水材质和动画系统可应用于其他元素球或水体效果</li>
+            </ul>
+
+            <h3>🎨 视觉特点</h3>
+            <p>
+                元素水球呈现出晶莹剔透的质感，表面流动着细腻的水波纹理，光线透过水球产生柔和的折射效果。球体本身随着顶点动画轻柔地律动，仿佛内部蕴含着流动的能量。周围环绕着Houdini生成的装饰几何体，可能是丝带状、粒子群或抽象曲面，与水球形成呼应。整体灯光设置突出了水的透明性和反射特性，后期处理的Bloom效果为水球增添了神秘的魔法氛围，整体呈现出一个充满活力和艺术感的元素系统。
+            </p>
+
+        </div>
+    </div>
+
+    <script>
+        // Canvas粒子背景动画
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 80;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 1.5 + 0.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // 绘制连接线
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 120) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 * (1 - distance / 120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>

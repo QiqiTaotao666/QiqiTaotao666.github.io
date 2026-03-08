@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>写实植物制作 - TA Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            color: #888;
+            text-decoration: none;
+            margin-bottom: 30px;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .back-button:hover {
+            color: #fff;
+        }
+
+        .project-header {
+            margin-bottom: 50px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 30px;
+        }
+
+        .project-title {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff 0%, #888 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.05);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+
+        .tag:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .video-section {
+            margin-bottom: 60px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .video-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .content-section {
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 30px;
+        }
+
+        .content-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #fff;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .content-section h3 {
+            font-size: 1.4em;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .content-section p {
+            color: #b0b0b0;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+
+        .content-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .content-section ul li {
+            color: #b0b0b0;
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.8;
+        }
+
+        .content-section ul li:before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .content-section ul li strong {
+            color: #fff;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.03);
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-5px);
+        }
+
+        .feature-card h4 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .feature-card p {
+            color: #888;
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .project-title {
+                font-size: 2em;
+            }
+
+            .content-section {
+                padding: 25px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="particles-canvas"></canvas>
+    
+    <div class="container">
+        <a href="index.html" class="back-button">← 返回主页</a>
+
+        <div class="project-header">
+            <h1 class="project-title">写实植物制作</h1>
+            <p style="font-size: 1.05em; line-height: 1.8; color: #b0b0b0; margin-bottom: 20px;">
+                区分大小叶片优化光照表现，叶片上下表面光滑度区分，次表面贴图细节处理，烘焙AO增强细节，草地自下而上遮蔽渐变。
+            </p>
+            <div class="project-tags">
+                <span class="tag">Realistic</span>
+                <span class="tag">Foliage</span>
+                <span class="tag">SSS</span>
+                <span class="tag">AO Baking</span>
+            </div>
+        </div>
+
+        <div class="video-section">
+            <h2>📹 演示视频</h2>
+            <div class="video-container">
+                <video controls autoplay loop muted controlsList="nodownload" allowfullscreen webkit-playsinline playsinline>
+                    <source src="videos/xieshizhiwu.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2>📋 项目介绍</h2>
+            <p>
+                这是一套专业的写实植物制作流程和技术方案。通过对不同类型叶片的光照优化、表面材质的精细化处理、次表面散射的细节增强、以及AO烘焙技术的应用，实现了高质量的写实植物渲染效果。系统性地解决了植物渲染中的关键技术难点，适用于开放世界、写实风格游戏中的植被系统。
+            </p>
+
+            <h3>✨ 核心特性</h3>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h4>🍃 叶片光照优化</h4>
+                    <p>针对大小叶片的不同特性，采用差异化的光照模型，优化光线穿透和反射表现</p>
+                </div>
+                <div class="feature-card">
+                    <h4>✨ 表面光滑度区分</h4>
+                    <p>精细区分叶片上下表面的光滑度，模拟真实植物叶片的正反面光学差异</p>
+                </div>
+                <div class="feature-card">
+                    <h4>💚 次表面散射增强</h4>
+                    <p>通过精心处理的次表面贴图，强化叶片透光时的细节表现，增加真实感</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎨 AO烘焙细节</h4>
+                    <p>烘焙高质量AO贴图增强细节，草地采用自下而上的遮蔽渐变，表现底部阴影关系</p>
+                </div>
+            </div>
+
+            <h3>🛠️ 技术实现</h3>
+            <ul>
+                <li><strong>叶片分类系统：</strong>根据叶片大小和形态特征分为大叶型（阔叶）和小叶型（针叶、细叶），使用不同的Shader参数配置</li>
+                <li><strong>大叶型光照：</strong>强化次表面散射效果，增加透光细节，使用更高的SSS强度和更细致的厚度图</li>
+                <li><strong>小叶型光照：</strong>简化SSS计算，增强环境光遮蔽，注重整体光影层次而非单片细节</li>
+                <li><strong>双面光滑度：</strong>叶片上表面使用较高光滑度模拟蜡质层，下表面使用较低光滑度表现绒毛质感</li>
+                <li><strong>光滑度贴图：</strong>将上下表面光滑度差异烘焙到贴图，通过法线方向判断采样区域</li>
+                <li><strong>次表面贴图处理：</strong>基于叶脉结构绘制厚度图，叶脉处厚度高（透光少），叶肉处厚度低（透光多）</li>
+                <li><strong>树木AO烘焙：</strong>使用高密度采样烘焙树冠内部的光线遮蔽，突出树枝和叶片的层次关系</li>
+                <li><strong>草地AO渐变：</strong>直接烘焙自下而上的垂直渐变遮蔽，底部深色模拟地面接触阴影，顶部明亮受天光照射</li>
+                <li><strong>AO混合策略：</strong>结合烘焙AO和实时SSAO，烘焙提供稳定的大范围遮蔽，SSAO补充动态物体的接触阴影</li>
+            </ul>
+
+            <h3>💡 技术亮点</h3>
+            <ul>
+                <li><strong>差异化光照策略：</strong>根据植物类型使用不同的光照模型，兼顾表现力和性能</li>
+                <li><strong>真实物理特性：</strong>准确模拟叶片正反面的光学差异，提升写实度</li>
+                <li><strong>高质量SSS：</strong>精心制作的次表面贴图带来丰富的透光细节</li>
+                <li><strong>智能AO烘焙：</strong>草地的自下而上渐变烘焙简单高效，效果自然</li>
+                <li><strong>性能友好：</strong>通过烘焙技术减少实时计算，保持高帧率</li>
+                <li><strong>易于扩展：</strong>流程化的制作方案可快速应用于不同植物资产</li>
+            </ul>
+
+            <h3>🎨 视觉特点</h3>
+            <p>
+                植物呈现出高度写实的视觉效果。大型阔叶在背光时展现丰富的透光细节，叶脉清晰可见，叶片边缘呈现自然的半透明感。小型针叶和草叶通过精细的AO和光影层次营造出密集自然的群落效果。叶片表面的光泽变化真实，正面光滑有高光，反面柔和哑光。草地底部有明显的阴影累积，顶部则接收充足的天光，整体层次分明。植被在不同光照条件下都能表现出自然的色彩和质感变化。
+            </p>
+
+        </div>
+    </div>
+
+    <script>
+        // Canvas粒子背景动画
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 80;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.radius = Math.random() * 1.5 + 0.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // 绘制连接线
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 120) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 * (1 - distance / 120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
