@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>技术美术作品集 | Technical Artist Portfolio</title>
+    <title>技术美术作品集 | Technical Artist</title>
     <style>
         * {
             margin: 0;
@@ -11,120 +11,184 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Microsoft YaHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace, 'Microsoft YaHei', sans-serif;
+            line-height: 1.8;
+            color: #e0e0e0;
+            background: #0a0a0a;
             min-height: 100vh;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        /* 固定导航栏 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #222;
+            z-index: 1000;
+            padding: 20px 0;
         }
 
-        header {
-            text-align: center;
-            padding: 60px 20px;
-            color: white;
-            animation: fadeInDown 1s ease-out;
+        .nav-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #00d9ff;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #888;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.95em;
+        }
+
+        .nav-links a:hover {
+            color: #00d9ff;
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 100px 40px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 首屏介绍 */
+        .hero {
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 0;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 60px;
         }
 
         .profile-img {
             width: 150px;
             height: 150px;
             border-radius: 50%;
-            border: 5px solid white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 3px solid #00d9ff;
             object-fit: cover;
-            margin-bottom: 20px;
-            background: #fff;
+            background: #1a1a1a;
+            flex-shrink: 0;
+        }
+
+        .profile-img.placeholder {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
             font-size: 60px;
         }
 
-        h1 {
-            font-size: 2.5em;
+        .profile-text h1 {
+            font-size: 3em;
+            color: #ffffff;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .profile-text .role {
+            font-size: 1.3em;
+            color: #00d9ff;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
-        .subtitle {
-            font-size: 1.2em;
-            opacity: 0.9;
+        .profile-text .bio {
+            color: #888;
+            font-size: 1.05em;
+            line-height: 1.7;
         }
 
+        .social-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .social-links a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.95em;
+        }
+
+        .social-links a:hover {
+            color: #00d9ff;
+        }
+
+        /* 分区标题 */
         .section {
-            background: white;
-            margin: 30px 0;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            animation: fadeInUp 1s ease-out;
+            margin: 80px 0;
         }
 
-        .section h2 {
+        .section-title {
             font-size: 2em;
-            margin-bottom: 30px;
-            color: #667eea;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
+            color: #ffffff;
+            margin-bottom: 40px;
+            font-weight: 600;
+            position: relative;
             display: inline-block;
         }
 
-        .about-content {
-            font-size: 1.1em;
-            line-height: 1.8;
-            color: #555;
-        }
-
-        /* 实习经历样式 */
-        .experience-timeline {
-            position: relative;
-            padding-left: 30px;
-        }
-
-        .experience-timeline::before {
+        .section-title::after {
             content: '';
             position: absolute;
+            bottom: -8px;
             left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-            border-radius: 2px;
+            width: 60px;
+            height: 3px;
+            background: #00d9ff;
         }
 
+        /* 关于我 */
+        .about-content p {
+            color: #b0b0b0;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+
+        /* 实习经历 */
         .experience-item {
-            position: relative;
-            margin-bottom: 40px;
-            padding: 25px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .experience-item::before {
-            content: '';
-            position: absolute;
-            left: -38px;
-            top: 30px;
-            width: 16px;
-            height: 16px;
-            background: #667eea;
-            border: 4px solid white;
-            border-radius: 50%;
-            box-shadow: 0 0 0 3px #667eea33;
+            margin-bottom: 50px;
+            padding: 30px;
+            background: #111;
+            border-left: 3px solid #00d9ff;
+            border-radius: 4px;
+            transition: background 0.3s ease;
         }
 
         .experience-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+            background: #151515;
         }
 
         .experience-header {
@@ -133,29 +197,25 @@
             align-items: flex-start;
             margin-bottom: 15px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 15px;
         }
 
-        .experience-left h3 {
+        .experience-header h3 {
             font-size: 1.4em;
-            color: #333;
-            margin-bottom: 5px;
+            color: #ffffff;
+            font-weight: 600;
         }
 
-        .position {
-            color: #667eea;
-            font-weight: 500;
-            font-size: 1.05em;
+        .experience-header .company {
+            font-size: 1.1em;
+            color: #00d9ff;
+            margin-bottom: 5px;
         }
 
         .experience-date {
             color: #666;
-            font-weight: 500;
-            background: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.95em;
-            white-space: nowrap;
+            font-size: 0.9em;
+            font-family: 'Consolas', monospace;
         }
 
         .experience-content ul {
@@ -167,7 +227,7 @@
             position: relative;
             padding-left: 25px;
             margin-bottom: 12px;
-            color: #555;
+            color: #999;
             line-height: 1.7;
         }
 
@@ -175,101 +235,139 @@
             content: '▹';
             position: absolute;
             left: 0;
-            color: #667eea;
-            font-weight: bold;
+            color: #00d9ff;
             font-size: 1.2em;
         }
 
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+        /* 技能标签 */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .skill-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .skill-tag {
+            padding: 10px 20px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 4px;
+            color: #b0b0b0;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: #00d9ff;
+            color: #00d9ff;
+            transform: translateY(-2px);
+        }
+
+        /* 作品集 */
+        .category {
+            margin-bottom: 50px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
             cursor: pointer;
+            user-select: none;
+            border-bottom: 1px solid #222;
         }
 
-        .skill-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        .category-header:hover .category-title {
+            color: #00d9ff;
         }
 
-        .skill-card h3 {
-            font-size: 1.3em;
-            margin-bottom: 10px;
+        .category-title {
+            font-size: 1.5em;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: color 0.3s ease;
         }
 
-        .skill-level {
-            background: rgba(255,255,255,0.3);
-            height: 8px;
-            border-radius: 4px;
+        .category-count {
+            font-size: 0.7em;
+            color: #666;
+            margin-left: 10px;
+        }
+
+        .category-toggle {
+            color: #666;
+            font-size: 1.2em;
+            transition: transform 0.4s ease;
+        }
+
+        .category.collapsed .category-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .category-content {
+            max-height: 5000px;
             overflow: hidden;
-            margin-top: 10px;
+            transition: max-height 0.5s ease, opacity 0.4s ease;
+            opacity: 1;
+            padding-top: 30px;
         }
 
-        .skill-progress {
-            height: 100%;
-            background: white;
-            border-radius: 4px;
-            transition: width 1s ease;
+        .category.collapsed .category-content {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0;
         }
 
         .portfolio-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 20px;
+            gap: 25px;
         }
 
         .portfolio-item {
-            background: #f8f9fa;
-            border-radius: 10px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 4px;
             overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
+            transition: all 0.3s ease;
             text-decoration: none;
             color: inherit;
             display: block;
         }
 
         .portfolio-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            border-color: #00d9ff;
+            transform: translateY(-5px);
         }
 
         .portfolio-img {
             width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 180px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #00d9ff;
             font-size: 3em;
         }
 
         .portfolio-content {
-            padding: 20px;
+            padding: 25px;
         }
 
         .portfolio-content h3 {
-            font-size: 1.4em;
+            font-size: 1.3em;
+            color: #ffffff;
             margin-bottom: 10px;
-            color: #333;
+            font-weight: 600;
         }
 
         .portfolio-content p {
-            color: #666;
-            line-height: 1.6;
+            color: #888;
+            line-height: 1.7;
+            font-size: 0.95em;
         }
 
         .portfolio-tags {
@@ -280,215 +378,109 @@
         }
 
         .tag {
-            background: #667eea;
-            color: white;
+            background: rgba(0, 217, 255, 0.1);
+            color: #00d9ff;
             padding: 5px 12px;
-            border-radius: 20px;
+            border-radius: 3px;
             font-size: 0.85em;
+            border: 1px solid rgba(0, 217, 255, 0.2);
         }
 
-        .contact-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            transition: background 0.3s ease;
-        }
-
-        .contact-item:hover {
-            background: #e9ecef;
-        }
-
-        .contact-icon {
-            font-size: 2em;
-            margin-right: 15px;
-            color: #667eea;
-        }
-
-        .contact-details h3 {
-            font-size: 1.1em;
-            margin-bottom: 5px;
-            color: #333;
-        }
-
-        .contact-details p {
-            color: #666;
-        }
-
+        /* 页脚 */
         footer {
             text-align: center;
-            padding: 30px;
-            color: white;
+            padding: 40px 0;
+            color: #666;
             font-size: 0.9em;
+            border-top: 1px solid #222;
+            margin-top: 80px;
         }
 
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 折叠分类样式 */
-        .category {
-            margin-bottom: 30px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .category-header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: white;
-            padding: 20px 30px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.3s ease;
-            user-select: none;
-        }
-
-        .category-header:hover {
-            background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
-        }
-
-        .category-title {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 1.3em;
-            font-weight: bold;
-        }
-
-        .category-count {
-            font-size: 0.8em;
-            background: rgba(255,255,255,0.2);
-            padding: 5px 15px;
-            border-radius: 20px;
-        }
-
-        .category-toggle {
-            font-size: 1.2em;
-            transition: transform 0.4s ease;
-        }
-
-        .category-content {
-            max-height: 3000px;
-            overflow: hidden;
-            padding: 30px;
-            transition: max-height 0.5s ease, padding 0.5s ease, opacity 0.4s ease;
-            opacity: 1;
-        }
-
-        .category.collapsed .category-content {
-            max-height: 0;
-            padding: 0 30px;
-            opacity: 0;
-        }
-
-        .category.collapsed .category-toggle {
-            transform: rotate(-90deg);
-        }
-
+        /* 移动端适配 */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
-            }
-
-            .section {
-                padding: 25px;
-            }
-
-            .section h2 {
-                font-size: 1.5em;
-            }
-
-            .skills-grid,
-            .portfolio-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .category-header {
-                padding: 15px 20px;
-            }
-
-            .category-title {
-                font-size: 1.1em;
-                gap: 10px;
-            }
-
-            .category-content {
-                padding: 20px;
-            }
-
-            .category.collapsed .category-content {
+            .nav-content {
                 padding: 0 20px;
             }
 
-            .experience-timeline {
-                padding-left: 20px;
+            .nav-links {
+                gap: 15px;
             }
 
-            .experience-timeline::before {
-                width: 2px;
+            .nav-links a {
+                font-size: 0.85em;
             }
 
-            .experience-item::before {
-                left: -29px;
-                width: 12px;
-                height: 12px;
-                border: 3px solid white;
+            .container {
+                padding: 80px 20px 40px;
+            }
+
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-text h1 {
+                font-size: 2em;
+            }
+
+            .profile-text .role {
+                font-size: 1.1em;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
+            .section-title {
+                font-size: 1.5em;
             }
 
             .experience-header {
                 flex-direction: column;
             }
 
-            .experience-left h3 {
-                font-size: 1.2em;
-            }
-
-            .experience-date {
-                align-self: flex-start;
+            .portfolio-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="profile-img">👨‍💻</div>
-            <h1>张三</h1>
-            <p class="subtitle">全栈开发工程师 | 设计爱好者</p>
-        </header>
+    <!-- 固定导航栏 -->
+    <nav>
+        <div class="nav-content">
+            <a href="#" class="nav-logo">TA Portfolio</a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+            </ul>
+        </div>
+    </nav>
 
-        <section class="section">
-            <h2>关于我</h2>
+    <div class="container">
+        <!-- 首屏介绍 -->
+        <section class="hero">
+            <div class="profile-section">
+                <img src="profile.jpg" alt="个人照片" class="profile-img">
+                <div class="profile-text">
+                    <h1>张三</h1>
+                    <div class="role">Technical Artist / Shader Artist</div>
+                    <p class="bio">连接艺术与技术，为游戏和实时渲染创造视觉奇迹</p>
+                    <div class="social-links">
+                        <a href="mailto:1506296334@qq.com">Email</a>
+                        <a href="https://github.com/yourusername" target="_blank">GitHub</a>
+                        <a href="https://linkedin.com/in/yourprofile" target="_blank">LinkedIn</a>
+                        <a href="https://artstation.com/yourprofile" target="_blank">ArtStation</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我 -->
+        <section id="about" class="section">
+            <h2 class="section-title">About</h2>
             <div class="about-content">
                 <p>你好！我是一名技术美术，致力于连接艺术与技术，为游戏和实时渲染项目创造视觉奇迹。</p>
                 <p>拥有5年游戏行业经验，精通Shader编程、材质开发、特效制作和渲染管线优化。擅长使用Unreal Engine、Unity和Houdini等工具，将创意转化为高性能的视觉效果。</p>
@@ -496,339 +488,386 @@
             </div>
         </section>
 
-        <section class="section">
-            <h2>实习经历</h2>
-            <div class="experience-timeline">
-                <div class="experience-item">
-                    <div class="experience-header">
-                        <div class="experience-left">
-                            <h3>🎮 XX游戏公司</h3>
-                            <p class="position">技术美术实习生 | Technical Artist Intern</p>
-                        </div>
-                        <div class="experience-date">2024.06 - 2024.12</div>
+        <!-- 实习经历 -->
+        <section id="experience" class="section">
+            <h2 class="section-title">Experience</h2>
+            
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div>
+                        <div class="company">🎮 XX游戏公司</div>
+                        <h3>技术美术实习生 | Technical Artist Intern</h3>
                     </div>
-                    <div class="experience-content">
-                        <ul>
-                            <li>参与开放世界RPG项目的材质与特效制作，开发了30+个PBR材质和20+个技能特效</li>
-                            <li>使用HLSL编写自定义Shader，实现水体、植被、角色溶解等特殊效果</li>
-                            <li>开发Python工具批量处理和优化场景资源，将材质加载时间减少40%</li>
-                            <li>协助优化渲染管线，通过合批和LOD策略使移动端帧率提升25%</li>
-                        </ul>
-                    </div>
+                    <div class="experience-date">2024.06 - 2024.12</div>
                 </div>
-
-                <div class="experience-item">
-                    <div class="experience-header">
-                        <div class="experience-left">
-                            <h3>🎬 XX影视工作室</h3>
-                            <p class="position">实时渲染实习生 | Real-time Rendering Intern</p>
-                        </div>
-                        <div class="experience-date">2023.12 - 2024.05</div>
-                    </div>
-                    <div class="experience-content">
-                        <ul>
-                            <li>使用Unreal Engine为虚拟制片项目搭建实时渲染场景</li>
-                            <li>制作程序化Houdini HDA工具，用于快速生成建筑和环境资产</li>
-                            <li>负责灯光设置和后期处理，确保虚拟场景与实拍素材无缝融合</li>
-                            <li>参与技术预演（Tech-Viz）流程，为导演提供实时画面预览</li>
-                        </ul>
-                    </div>
+                <div class="experience-content">
+                    <ul>
+                        <li>参与开放世界RPG项目的材质与特效制作，开发了30+个PBR材质和20+个技能特效</li>
+                        <li>使用HLSL编写自定义Shader，实现水体、植被、角色溶解等特殊效果</li>
+                        <li>开发Python工具批量处理和优化场景资源，将材质加载时间减少40%</li>
+                        <li>协助优化渲染管线，通过合批和LOD策略使移动端帧率提升25%</li>
+                    </ul>
                 </div>
+            </div>
 
-                <div class="experience-item">
-                    <div class="experience-header">
-                        <div class="experience-left">
-                            <h3>💡 独立项目</h3>
-                            <p class="position">技术美术 | Personal Projects</p>
-                        </div>
-                        <div class="experience-date">2023.06 - 至今</div>
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div>
+                        <div class="company">🎬 XX影视工作室</div>
+                        <h3>实时渲染实习生 | Real-time Rendering Intern</h3>
                     </div>
-                    <div class="experience-content">
-                        <ul>
-                            <li>开发并维护个人技术博客，分享Shader教程和渲染技术文章，累计阅读量10万+</li>
-                            <li>在GitHub开源多个Unity和Unreal插件工具，获得500+ stars</li>
-                            <li>参与多个Indie游戏项目的技术美术支持，负责视觉效果开发</li>
-                            <li>持续学习前沿渲染技术，包括光线追踪、Nanite、Lumen等</li>
-                        </ul>
+                    <div class="experience-date">2023.12 - 2024.05</div>
+                </div>
+                <div class="experience-content">
+                    <ul>
+                        <li>使用Unreal Engine为虚拟制片项目搭建实时渲染场景</li>
+                        <li>制作程序化Houdini HDA工具，用于快速生成建筑和环境资产</li>
+                        <li>负责灯光设置和后期处理，确保虚拟场景与实拍素材无缝融合</li>
+                        <li>参与技术预演（Tech-Viz）流程，为导演提供实时画面预览</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div>
+                        <div class="company">💡 独立项目</div>
+                        <h3>技术美术 | Personal Projects</h3>
                     </div>
+                    <div class="experience-date">2023.06 - Present</div>
+                </div>
+                <div class="experience-content">
+                    <ul>
+                        <li>开发并维护个人技术博客，分享Shader教程和渲染技术文章，累计阅读量10万+</li>
+                        <li>在GitHub开源多个Unity和Unreal插件工具，获得500+ stars</li>
+                        <li>参与多个Indie游戏项目的技术美术支持，负责视觉效果开发</li>
+                        <li>持续学习前沿渲染技术，包括光线追踪、Nanite、Lumen等</li>
+                    </ul>
                 </div>
             </div>
         </section>
 
-        <section class="section">
-            <h2>专业技能</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <h3>前端开发</h3>
-                    <p>HTML/CSS/JavaScript</p>
-                    <div class="skill-level">
-                        <div class="skill-progress" style="width: 90%"></div>
-                    </div>
-                </div>
-                <div class="skill-card">
-                    <h3>React/Vue</h3>
-                    <p>现代前端框架</p>
-                    <div class="skill-level">
-                        <div class="skill-progress" style="width: 85%"></div>
-                    </div>
-                </div>
-                <div class="skill-card">
-                    <h3>后端开发</h3>
-                    <p>Node.js/Python</p>
-                    <div class="skill-level">
-                        <div class="skill-progress" style="width: 80%"></div>
-                    </div>
-                </div>
-                <div class="skill-card">
-                    <h3>数据库</h3>
-                    <p>MySQL/MongoDB</p>
-                    <div class="skill-level">
-                        <div class="skill-progress" style="width: 75%"></div>
-                    </div>
-                </div>
-                <div class="skill-card">
-                    <h3>UI/UX设计</h3>
-                    <p>Figma/Sketch</p>
-                    <div class="skill-level">
-                        <div class="skill-progress" style="width: 70%"></div>
-                    </div>
-                </div>
-                <div class="skill-card">
-                    <h3>版本控制</h3>
-                    <p>Git/GitHub</p>
-                    <div class="skill-level">
-                        <div class="skill-progress" style="width: 88%"></div>
-                    </div>
-                </div>
+        <!-- 专业技能 -->
+        <section id="skills" class="section">
+            <h2 class="section-title">Skills</h2>
+            <div class="skills-container">
+                <div class="skill-tag">Shader Programming (HLSL/GLSL)</div>
+                <div class="skill-tag">Unreal Engine</div>
+                <div class="skill-tag">Unity (URP/HDRP)</div>
+                <div class="skill-tag">Houdini</div>
+                <div class="skill-tag">Substance Designer</div>
+                <div class="skill-tag">Niagara / VFX Graph</div>
+                <div class="skill-tag">Python / C#</div>
+                <div class="skill-tag">PBR Workflow</div>
+                <div class="skill-tag">Rendering Pipeline</div>
+                <div class="skill-tag">Performance Optimization</div>
+                <div class="skill-tag">Material System</div>
+                <div class="skill-tag">Real-time VFX</div>
             </div>
         </section>
 
-        <section class="section">
-            <h2>作品集</h2>
-            <div class="portfolio-categories">
-                
-                <!-- 材质渲染类别 -->
-                <div class="category">
-                    <div class="category-header" onclick="toggleCategory(this)">
-                        <div class="category-title">
-                            <span>💎</span>
-                            <span>材质渲染</span>
-                            <span class="category-count">4个作品</span>
-                        </div>
-                        <span class="category-toggle">▼</span>
+        <!-- 作品集 -->
+        <section id="portfolio" class="section">
+            <h2 class="section-title">Portfolio</h2>
+
+            <!-- 材质渲染类别 -->
+            <div class="category">
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <div class="category-title">
+                        <span>💎</span>
+                        <span>Material & Rendering<span class="category-count">4 projects</span></span>
                     </div>
-                    <div class="category-content">
-                        <div class="portfolio-grid">
-                            <a href="project1.html" class="portfolio-item">
-                                <div class="portfolio-img">💧</div>
-                                <div class="portfolio-content">
-                                    <h3>程序化水体系统</h3>
-                                    <p>基于Gerstner波的真实水体模拟系统，支持实时反射、折射、焦散效果。包含泡沫、波纹、浅水深水过渡等细节。</p>
-                                    <div class="portfolio-tags">
-                                        <span class="tag">Unreal Engine</span>
-                                        <span class="tag">HLSL Shader</span>
-                                        <span class="tag">Niagara VFX</span>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <div class="portfolio-item">
-                                <div class="portfolio-img">✨</div>
-                                <div class="portfolio-content">
-                                    <h3>PBR材质库</h3>
-                                    <p>程序化生成的PBR材质库，包含金属、石材、布料等30+种材质。基于Substance Designer制作，参数可调。</p>
-                                    <div class="portfolio-tags">
-                                        <span class="tag">Substance Designer</span>
-                                        <span class="tag">PBR Workflow</span>
-                                        <span class="tag">Material Function</span>
-                                    </div>
+                    <span class="category-toggle">▼</span>
+                </div>
+                <div class="category-content">
+                    <div class="portfolio-grid">
+                        <a href="project1.html" class="portfolio-item">
+                            <div class="portfolio-img">💧</div>
+                            <div class="portfolio-content">
+                                <h3>程序化水体系统</h3>
+                                <p>基于Gerstner波的真实水体模拟系统，支持实时反射、折射、焦散效果。包含泡沫、波纹、浅水深水过渡等细节。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">Unreal Engine</span>
+                                    <span class="tag">HLSL Shader</span>
+                                    <span class="tag">Niagara VFX</span>
                                 </div>
                             </div>
+                        </a>
 
-                            <div class="portfolio-item">
-                                <div class="portfolio-img">⚡</div>
-                                <div class="portfolio-content">
-                                    <h3>角色溶解效果</h3>
-                                    <p>高质量的角色死亡溶解Shader，支持边缘发光、粒子飘散、扭曲变形等效果。可配置多种溶解模式。</p>
-                                    <div class="portfolio-tags">
-                                        <span class="tag">Shader Programming</span>
-                                        <span class="tag">Vertex Animation</span>
-                                        <span class="tag">Alpha Erosion</span>
-                                    </div>
+                        <div class="portfolio-item">
+                            <div class="portfolio-img">✨</div>
+                            <div class="portfolio-content">
+                                <h3>PBR材质库</h3>
+                                <p>程序化生成的PBR材质库，包含金属、石材、布料等30+种材质。基于Substance Designer制作，参数可调。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">Substance Designer</span>
+                                    <span class="tag">PBR Workflow</span>
+                                    <span class="tag">Material Function</span>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="portfolio-item">
-                                <div class="portfolio-img">🌈</div>
-                                <div class="portfolio-content">
-                                    <h3>全息投影Shader</h3>
-                                    <p>科幻风格的全息投影效果，包含扫描线、故障效果、边缘发光。支持颜色和强度实时调节。</p>
-                                    <div class="portfolio-tags">
-                                        <span class="tag">Custom Shader</span>
-                                        <span class="tag">Screen Space</span>
-                                        <span class="tag">Fresnel</span>
-                                    </div>
+                        <div class="portfolio-item">
+                            <div class="portfolio-img">⚡</div>
+                            <div class="portfolio-content">
+                                <h3>角色溶解效果</h3>
+                                <p>高质量的角色死亡溶解Shader，支持边缘发光、粒子飘散、扭曲变形等效果。可配置多种溶解模式。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">Shader Programming</span>
+                                    <span class="tag">Vertex Animation</span>
+                                    <span class="tag">Alpha Erosion</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="portfolio-item">
+                            <div class="portfolio-img">🌈</div>
+                            <div class="portfolio-content">
+                                <h3>全息投影Shader</h3>
+                                <p>科幻风格的全息投影效果，包含扫描线、故障效果、边缘发光。支持颜色和强度实时调节。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">Custom Shader</span>
+                                    <span class="tag">Screen Space</span>
+                                    <span class="tag">Fresnel</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- 工具类别 -->
-                <div class="category">
-                    <div class="category-header" onclick="toggleCategory(this)">
-                        <div class="category-title">
-                            <span>🔧</span>
-                            <span>工具开发</span>
-                            <span class="category-count">3个作品</span>
-                        </div>
-                        <span class="category-toggle">▼</span>
-                    </div>
-                    <div class="category-content">
-                        <div class="portfolio-grid">
-                            <a href="project3.html" class="portfolio-item">
-                                <div class="portfolio-img">🌳</div>
-                                <div class="portfolio-content">
-                                    <h3>程序化植被工具</h3>
-                                    <p>Houdini HDA工具，用于批量生成和分布植被。支持LOD自动生成、风场动画、季节变化等功能。大幅提升美术效率。</p>
-                                    <div class="portfolio-tags">
-                                        <span class="tag">Houdini</span>
-                                        <span class="tag">Python</span>
-                                        <span class="tag">Unreal HDA</span>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <div class="portfolio-item">
-                                <div class="portfolio-img">🎨</div>
-                                <div class="portfolio-content">
-                                    <h3>材质批处理工具</h3>
-                                    <p>Unity Editor扩展工具，批量处理和优化材质参数。支持纹理压缩、Shader变体剔除、材质合并等功能。</p>
-                                    <div class="portfolio-tags">
-                                        <span class="tag">C# Editor</span>
-                                        <span class="tag">Unity Tool</span>
-                                        <span class="tag">Automation</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="portfolio-item">
-                                <div class="portfolio-img">📊</div>
-                                <div class="portfolio-content">
-                                    <h3>性能分析工具</h3>
-                                    <p>实时渲染性能监控和分析工具，可视化显示Draw Call、顶点数、纹理占用等数据。帮助快速定位性能瓶颈。</p>
-                                    <div class="portfolio-tags">
-                                        <span class="tag">Python</span>
-                                        <span class="tag">Profiling</span>
-                                        <span class="tag">Data Visualization</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 项目类别 -->
-                <div class="category">
-                    <div class="category-header" onclick="toggleCategory(this)">
-                        <div class="category-title">
-                            <span>🎮</span>
-                            <span>项目作品</span>
-                            <span class="category-count">3个作品</span>
-                        </div>
-                        <span class="category-toggle">▼</span>
-                    </div>
-                    <div class="category-content">
-                        <div class="portfolio-grid">
-                            <a href="project2.html" class="portfolio-item">
-                                <div class="portfolio-img">🔥</div>
-                                <div class="portfolio-content">
-                                    <h3>风格化特效套装</h3>
-                                    <p>卡通风格的技能特效集合，包含魔法阵、能量球、爆炸、buff效果等。使用GPU粒子和自定义Shader实现。</p>
-                                    <div class="portfolio-tags">
-                                        <span class="tag">Unity URP</span>
-                                        <span class="tag">VFX Graph</span>
-                                        <span class="tag">Shader Graph</span>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <div class="portfolio-item">
-                                <div class="portfolio-img">🌅</div>
-                                <div class="portfolio-content">
-                                    <h3>动态天气系统</h3>
-                                    <p>完整的天气系统，支持晴天、雨天、雪天、雾天的实时切换。包含体积云、天空盒、光照变化和后处理效果。</p>
-                                    <div class="portfolio-tags">
-                                        <span class="tag">Unreal Blueprint</span>
-                                        <span class="tag">Volumetric Lighting</span>
-                                        <span class="tag">Post Process</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="portfolio-item">
-                                <div class="portfolio-img">🏰</div>
-                                <div class="portfolio-content">
-                                    <h3>开放世界场景</h3>
-                                    <p>10平方公里的开放世界地图，包含多种地形和生态系统。负责整体渲染管线、光照方案和性能优化。</p>
-                                    <div class="portfolio-tags">
-                                        <span class="tag">Unreal Engine</span>
-                                        <span class="tag">Landscape</span>
-                                        <span class="tag">Lighting</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-        </section>
 
-        <script>
-            function toggleCategory(header) {
-                const category = header.parentElement;
-                category.classList.toggle('collapsed');
-            }
-        </script>
+            <!-- 工具类别 -->
+            <div class="category">
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <div class="category-title">
+                        <span>🔧</span>
+                        <span>Tools & Pipeline<span class="category-count">3 projects</span></span>
+                    </div>
+                    <span class="category-toggle">▼</span>
+                </div>
+                <div class="category-content">
+                    <div class="portfolio-grid">
+                        <a href="project3.html" class="portfolio-item">
+                            <div class="portfolio-img">🌳</div>
+                            <div class="portfolio-content">
+                                <h3>程序化植被工具</h3>
+                                <p>Houdini HDA工具，用于批量生成和分布植被。支持LOD自动生成、风场动画、季节变化等功能。大幅提升美术效率。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">Houdini</span>
+                                    <span class="tag">Python</span>
+                                    <span class="tag">Unreal HDA</span>
+                                </div>
+                            </div>
+                        </a>
 
-        <section class="section">
-            <h2>联系方式</h2>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <div class="contact-icon">📧</div>
-                    <div class="contact-details">
-                        <h3>邮箱</h3>
-                        <p>your.email@example.com</p>
+                        <div class="portfolio-item">
+                            <div class="portfolio-img">🎨</div>
+                            <div class="portfolio-content">
+                                <h3>材质批处理工具</h3>
+                                <p>Unity Editor扩展工具，批量处理和优化材质参数。支持纹理压缩、Shader变体剔除、材质合并等功能。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">C# Editor</span>
+                                    <span class="tag">Unity Tool</span>
+                                    <span class="tag">Automation</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="portfolio-item">
+                            <div class="portfolio-img">📊</div>
+                            <div class="portfolio-content">
+                                <h3>性能分析工具</h3>
+                                <p>实时渲染性能监控和分析工具，可视化显示Draw Call、顶点数、纹理占用等数据。帮助快速定位性能瓶颈。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">Python</span>
+                                    <span class="tag">Profiling</span>
+                                    <span class="tag">Data Visualization</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="contact-item">
-                    <div class="contact-icon">📱</div>
-                    <div class="contact-details">
-                        <h3>电话</h3>
-                        <p>+86 138-0000-0000</p>
+            </div>
+
+            <!-- 项目类别 -->
+            <div class="category">
+                <div class="category-header" onclick="toggleCategory(this)">
+                    <div class="category-title">
+                        <span>🎮</span>
+                        <span>Game Projects<span class="category-count">3 projects</span></span>
                     </div>
+                    <span class="category-toggle">▼</span>
                 </div>
-                <div class="contact-item">
-                    <div class="contact-icon">🔗</div>
-                    <div class="contact-details">
-                        <h3>GitHub</h3>
-                        <p>github.com/yourusername</p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">💼</div>
-                    <div class="contact-details">
-                        <h3>LinkedIn</h3>
-                        <p>linkedin.com/in/yourprofile</p>
+                <div class="category-content">
+                    <div class="portfolio-grid">
+                        <a href="project2.html" class="portfolio-item">
+                            <div class="portfolio-img">🔥</div>
+                            <div class="portfolio-content">
+                                <h3>风格化特效套装</h3>
+                                <p>卡通风格的技能特效集合，包含魔法阵、能量球、爆炸、buff效果等。使用GPU粒子和自定义Shader实现。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">Unity URP</span>
+                                    <span class="tag">VFX Graph</span>
+                                    <span class="tag">Shader Graph</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <div class="portfolio-item">
+                            <div class="portfolio-img">🌅</div>
+                            <div class="portfolio-content">
+                                <h3>动态天气系统</h3>
+                                <p>完整的天气系统，支持晴天、雨天、雪天、雾天的实时切换。包含体积云、天空盒、光照变化和后处理效果。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">Unreal Blueprint</span>
+                                    <span class="tag">Volumetric Lighting</span>
+                                    <span class="tag">Post Process</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="portfolio-item">
+                            <div class="portfolio-img">🏰</div>
+                            <div class="portfolio-content">
+                                <h3>开放世界场景</h3>
+                                <p>10平方公里的开放世界地图，包含多种地形和生态系统。负责整体渲染管线、光照方案和性能优化。</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">Unreal Engine</span>
+                                    <span class="tag">Landscape</span>
+                                    <span class="tag">Lighting</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <footer>
-            <p>&copy; 2026 技术美术作品集. 保留所有权利.</p>
+            <p>&copy; 2026 Technical Artist Portfolio. All rights reserved.</p>
         </footer>
     </div>
+
+    <canvas id="canvas-nest" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none;"></canvas>
+
+    <script>
+        function toggleCategory(header) {
+            const category = header.parentElement;
+            category.classList.toggle('collapsed');
+        }
+
+        // 自定义粒子背景效果
+        (function() {
+            const canvas = document.getElementById('canvas-nest');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const particleCount = 120;
+            const lineDistance = 150;
+            const mouseRadius = 200;
+            
+            const mouse = {
+                x: null,
+                y: null
+            };
+            
+            // 监听鼠标移动
+            window.addEventListener('mousemove', function(e) {
+                mouse.x = e.x;
+                mouse.y = e.y;
+            });
+            
+            // 监听窗口大小变化
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+            
+            // 粒子类
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.radius = 2;
+                }
+                
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    
+                    // 边界检测
+                    if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+                    if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+                    
+                    // 鼠标吸引效果
+                    if (mouse.x && mouse.y) {
+                        const dx = mouse.x - this.x;
+                        const dy = mouse.y - this.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < mouseRadius) {
+                            const force = (mouseRadius - distance) / mouseRadius;
+                            this.x += dx * force * 0.02;
+                            this.y += dy * force * 0.02;
+                        }
+                    }
+                }
+                
+                draw() {
+                    ctx.fillStyle = 'rgba(0, 217, 255, 0.6)';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            
+            // 创建粒子
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+            
+            // 绘制连线
+            function drawLines() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < lineDistance) {
+                            const opacity = (1 - distance / lineDistance) * 0.6;
+                            ctx.strokeStyle = `rgba(0, 217, 255, ${opacity})`;
+                            ctx.lineWidth = 1;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // 动画循环
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+                
+                drawLines();
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        })();
+    </script>
 </body>
 </html>
