@@ -126,26 +126,9 @@
     <div class="container">
         <h1>🎥 视频播放诊断测试</h1>
 
-        <!-- 重要提示 -->
-        <div class="test-section" style="background: #3a2a2a; border-color: #ff9800;">
-            <h2 style="color: #ff9800;">⚠️ 重要提示</h2>
-            <div class="info-box warning">
-                <strong>如果你看到"加载超时"错误：</strong>
-                <div style="margin-top: 15px; line-height: 2;">
-                    <p>✅ <strong>最佳方案</strong>：访问线上版本测试（已部署到 GitHub Pages）</p>
-                    <p style="margin-left: 20px; color: #00d9ff;">
-                        → <a href="https://qiqitaotao666.github.io/video-test.html" target="_blank" style="color: #00d9ff;">https://qiqitaotao666.github.io/video-test.html</a>
-                    </p>
-                    <br>
-                    <p>⚠️ 本地 file:// 协议有安全限制，视频可能无法加载</p>
-                    <p style="margin-left: 20px;">解决方法：使用 VS Code Live Server 插件启动本地服务器</p>
-                </div>
-            </div>
-        </div>
-
         <!-- 测试区域 1 -->
         <div class="test-section">
-            <h2>测试 1: bodian.mp4 (1.2 MB)</h2>
+            <h2>测试 1: bodian.mp4</h2>
             <div class="video-wrapper">
                 <video id="video1" controls preload="metadata">
                     <source src="videos/bodian.mp4" type="video/mp4">
@@ -160,7 +143,7 @@
 
         <!-- 测试区域 2 -->
         <div class="test-section">
-            <h2>测试 2: 游戏剪辑宣传.mp4 (13 MB)</h2>
+            <h2>测试 2: 游戏剪辑宣传.mp4</h2>
             <div class="video-wrapper">
                 <video id="video2" controls preload="metadata">
                     <source src="videos/dengat/游戏剪辑宣传.mp4" type="video/mp4">
@@ -174,28 +157,17 @@
         </div>
 
         <!-- 测试区域 3 -->
-        <div class="test-section" style="border-color: #f44336;">
-            <h2 style="color: #f44336;">测试 3: boss战演示.mp4 ⚠️ (652 MB - 文件过大！)</h2>
-            <div class="info-box error">
-                <strong>❌ 文件过大错误</strong>
-                <div style="margin-top: 15px; line-height: 1.8;">
-                    <p>这个视频文件大小为 <strong>652 MB</strong>，远超 GitHub 的 100MB 文件大小限制。</p>
-                    <p style="margin-top: 10px;"><strong>解决方案：</strong></p>
-                    <ul style="margin-left: 20px; margin-top: 10px;">
-                        <li>使用 HandBrake 或在线工具压缩视频到 < 50MB</li>
-                        <li>或使用 Git LFS (大文件存储)</li>
-                        <li>或将视频上传到 B站/YouTube 并嵌入链接</li>
-                    </ul>
-                    <p style="margin-top: 10px; color: #ff9800;">
-                        <strong>提示：</strong>网页视频建议分辨率 1080p，码率 2-4 Mbps，时长控制在 2-3 分钟以内。
-                    </p>
-                </div>
-            </div>
-            <div class="video-wrapper" style="display: none;">
-                <video id="video3" controls preload="none">
+        <div class="test-section">
+            <h2>测试 3: boss战演示.mp4</h2>
+            <div class="video-wrapper">
+                <video id="video3" controls preload="metadata">
                     <source src="videos/dengat/boss战演示.mp4" type="video/mp4">
                     您的浏览器不支持 HTML5 视频播放
                 </video>
+            </div>
+            <div class="info-box" id="info3">
+                <strong>状态：</strong><span class="status loading">加载中...</span>
+                <div id="details3" style="margin-top: 10px;"></div>
             </div>
         </div>
 
@@ -342,10 +314,10 @@
             }, 5000);
         }
 
-        // 测试所有视频（跳过过大的文件）
+        // 测试所有视频
         testVideo('video1', 'info1', 'details1');
         testVideo('video2', 'info2', 'details2');
-        // video3 (boss战演示.mp4) 文件过大，已禁用测试
+        testVideo('video3', 'info3', 'details3');
     </script>
 </body>
 </html>
