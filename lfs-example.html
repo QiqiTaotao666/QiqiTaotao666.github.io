@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LFS 视频播放示例</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+        h1 { color: #00d9ff; }
+        h2 { color: #4caf50; margin-top: 30px; }
+        .demo {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #00d9ff;
+        }
+        video {
+            width: 100%;
+            max-width: 600px;
+            margin: 15px 0;
+            background: #000;
+        }
+        .code {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+        .status {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+        }
+        .success { background: #2d5016; color: #4caf50; }
+        .error { background: #5d1616; color: #f44336; }
+        .warning { background: #5d4316; color: #ff9800; }
+    </style>
+</head>
+<body>
+    <h1>🎥 Git LFS 视频播放实战示例</h1>
+
+    <div class="demo">
+        <h2>方法 1: GitHub Media URL ⭐ 推荐</h2>
+        <p>直接访问 GitHub LFS 服务器上的真实文件</p>
+        
+        <div class="code">
+&lt;video controls&gt;
+    &lt;source src="https://media.githubusercontent.com/media/QiqiTaotao666/QiqiTaotao666.github.io/main/videos/bodian.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+        </div>
+
+        <video id="video1" controls preload="metadata">
+            <source src="https://media.githubusercontent.com/media/QiqiTaotao666/QiqiTaotao666.github.io/main/videos/bodian.mp4" type="video/mp4">
+            您的浏览器不支持视频播放
+        </video>
+        <div id="status1" class="status">等待加载...</div>
+
+        <p style="margin-top: 15px;"><strong>URL 格式：</strong></p>
+        <div class="code">https://media.githubusercontent.com/media/用户名/仓库名/分支名/文件路径</div>
+    </div>
+
+    <div class="demo">
+        <h2>方法 2: jsDelivr CDN</h2>
+        <p>通过全球 CDN 加速访问（支持 LFS 文件）</p>
+        
+        <div class="code">
+&lt;video controls&gt;
+    &lt;source src="https://cdn.jsdelivr.net/gh/QiqiTaotao666/QiqiTaotao666.github.io@main/videos/bodian.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+        </div>
+
+        <video id="video2" controls preload="metadata">
+            <source src="https://cdn.jsdelivr.net/gh/QiqiTaotao666/QiqiTaotao666.github.io@main/videos/bodian.mp4" type="video/mp4">
+            您的浏览器不支持视频播放
+        </video>
+        <div id="status2" class="status">等待加载...</div>
+
+        <p style="margin-top: 15px;"><strong>URL 格式：</strong></p>
+        <div class="code">https://cdn.jsdelivr.net/gh/用户名/仓库名@分支名/文件路径</div>
+    </div>
+
+    <div class="demo">
+        <h2>方法 3: 多源回退策略（最稳定）</h2>
+        <p>提供多个备用源，浏览器会自动尝试</p>
+        
+        <div class="code">
+&lt;video controls&gt;
+    &lt;!-- 主要源: GitHub Media --&gt;
+    &lt;source src="https://media.githubusercontent.com/media/.../video.mp4" type="video/mp4"&gt;
+    
+    &lt;!-- 备用源 1: jsDelivr --&gt;
+    &lt;source src="https://cdn.jsdelivr.net/gh/.../video.mp4" type="video/mp4"&gt;
+    
+    &lt;!-- 备用源 2: 直接路径 --&gt;
+    &lt;source src="videos/video.mp4" type="video/mp4"&gt;
+&lt;/video&gt;
+        </div>
+
+        <video id="video3" controls preload="metadata">
+            <!-- 主要源: GitHub Media URL -->
+            <source src="https://media.githubusercontent.com/media/QiqiTaotao666/QiqiTaotao666.github.io/main/videos/bodian.mp4" type="video/mp4">
+            <!-- 备用源 1: jsDelivr CDN -->
+            <source src="https://cdn.jsdelivr.net/gh/QiqiTaotao666/QiqiTaotao666.github.io@main/videos/bodian.mp4" type="video/mp4">
+            <!-- 备用源 2: 直接路径（如果文件已直接推送）-->
+            <source src="videos/bodian.mp4" type="video/mp4">
+            您的浏览器不支持视频播放
+        </video>
+        <div id="status3" class="status">等待加载...</div>
+    </div>
+
+    <div class="demo">
+        <h2>方法 4: 使用 JavaScript 自动选择</h2>
+        <p>根据文件大小自动选择最佳加载方式</p>
+        
+        <div class="code">
+&lt;script src="lfs-video-helper.js"&gt;&lt;/script&gt;
+&lt;div id="video-container"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+    const video = createRobustVideoElement('videos/bodian.mp4', 1.2);
+    document.getElementById('video-container').appendChild(video);
+&lt;/script&gt;
+        </div>
+
+        <div id="video-container4"></div>
+        <div id="status4" class="status">正在生成视频元素...</div>
+    </div>
+
+    <script src="lfs-video-helper.js"></script>
+    <script>
+        // 视频加载状态监控
+        function monitorVideo(videoId, statusId) {
+            const video = document.getElementById(videoId);
+            const status = document.getElementById(statusId);
+            
+            if (!video) return;
+
+            let currentSource = 0;
+            const sources = video.querySelectorAll('source');
+
+            video.addEventListener('loadstart', () => {
+                const src = video.currentSrc || (sources[currentSource] && sources[currentSource].src) || '未知';
+                status.innerHTML = `⏳ 正在加载...<br><small>源: ${src.substring(0, 60)}...</small>`;
+                status.className = 'status warning';
+            });
+
+            video.addEventListener('loadedmetadata', () => {
+                const src = video.currentSrc;
+                let sourceName = '未知';
+                if (src.includes('media.githubusercontent.com')) sourceName = 'GitHub Media URL';
+                else if (src.includes('jsdelivr')) sourceName = 'jsDelivr CDN';
+                else if (src.startsWith('videos/')) sourceName = '直接路径';
+                
+                status.innerHTML = `✅ 加载成功！<br>` +
+                    `<small>源: ${sourceName}</small><br>` +
+                    `<small>尺寸: ${video.videoWidth}x${video.videoHeight}</small><br>` +
+                    `<small>时长: ${video.duration.toFixed(2)}秒</small>`;
+                status.className = 'status success';
+            });
+
+            video.addEventListener('error', (e) => {
+                currentSource++;
+                if (currentSource < sources.length) {
+                    status.innerHTML = `⚠️ 源 ${currentSource} 失败，尝试下一个...<br>` +
+                        `<small>${sources[currentSource - 1].src.substring(0, 60)}...</small>`;
+                    status.className = 'status warning';
+                } else {
+                    const error = video.error;
+                    let msg = '❌ 所有源都加载失败: ';
+                    if (error) {
+                        switch(error.code) {
+                            case 1: msg += '加载中止'; break;
+                            case 2: msg += '网络错误'; break;
+                            case 3: msg += '解码失败'; break;
+                            case 4: msg += '格式不支持/文件不存在'; break;
+                        }
+                    }
+                    status.innerHTML = msg;
+                    status.className = 'status error';
+                }
+            });
+
+            // 超时检测
+            setTimeout(() => {
+                if (video.readyState === 0) {
+                    status.innerHTML = '⚠️ 加载超时（可能需要更长时间或检查网络）';
+                    status.className = 'status warning';
+                }
+            }, 10000);
+        }
+
+        // 监控前三个视频
+        monitorVideo('video1', 'status1');
+        monitorVideo('video2', 'status2');
+        monitorVideo('video3', 'status3');
+
+        // 方法 4: 使用 JavaScript 助手创建视频
+        setTimeout(() => {
+            const container = document.getElementById('video-container4');
+            const status = document.getElementById('status4');
+            
+            try {
+                const video = createRobustVideoElement('videos/bodian.mp4', 1.2);
+                video.id = 'video4';
+                container.appendChild(video);
+                status.innerHTML = '✅ 视频元素已创建（包含多个备用源）';
+                status.className = 'status success';
+                
+                // 监控这个视频
+                monitorVideo('video4', 'status4');
+            } catch (error) {
+                status.innerHTML = `❌ 创建失败: ${error.message}`;
+                status.className = 'status error';
+            }
+        }, 100);
+    </script>
+
+    <div style="margin-top: 50px; padding: 20px; background: #2a2a2a; border-radius: 8px;">
+        <h2>📝 使用建议</h2>
+        <ul style="line-height: 2;">
+            <li><strong>小文件（< 25MB）</strong>：直接推送到仓库，使用相对路径</li>
+            <li><strong>中等文件（25-50MB）</strong>：使用 jsDelivr CDN</li>
+            <li><strong>大文件（50MB-2GB）</strong>：使用 GitHub Media URL</li>
+            <li><strong>最佳实践</strong>：使用多源回退策略，确保兼容性</li>
+        </ul>
+
+        <h2 style="margin-top: 30px;">🔧 快速修改现有页面</h2>
+        <p>在你的 HTML 文件 <code>&lt;head&gt;</code> 标签中添加：</p>
+        <div class="code">
+&lt;script src="lfs-video-helper.js"&gt;&lt;/script&gt;
+        </div>
+        <p>脚本会自动为大文件视频添加备用源！</p>
+    </div>
+
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="index.html" style="color: #00d9ff; text-decoration: none;">← 返回首页</a> |
+        <a href="lfs-video-demo.html" style="color: #00d9ff; text-decoration: none;">查看完整方案</a>
+    </div>
+</body>
+</html>

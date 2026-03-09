@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LFS 视频播放方案演示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+        h1 { color: #00d9ff; }
+        h2 { color: #4caf50; margin-top: 40px; }
+        .solution {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #00d9ff;
+        }
+        .code {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        video {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px 0;
+            background: #000;
+        }
+        .warning {
+            background: #5d4316;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .success {
+            background: #2d5016;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎥 Git LFS 视频播放解决方案</h1>
+
+    <div class="solution">
+        <h2>方案 1: 使用 GitHub Media URL（推荐）</h2>
+        <p>GitHub 提供了特殊的 URL 来直接访问 LFS 文件内容：</p>
+        
+        <div class="code">
+&lt;video controls&gt;
+    &lt;source src="https://media.githubusercontent.com/media/用户名/仓库名/分支/path/to/video.mp4" 
+            type="video/mp4"&gt;
+&lt;/video&gt;
+        </div>
+
+        <p><strong>示例：</strong></p>
+        <div class="code">
+&lt;video controls&gt;
+    &lt;source src="https://media.githubusercontent.com/media/QiqiTaotao666/QiqiTaotao666.github.io/main/videos/bodian.mp4" 
+            type="video/mp4"&gt;
+&lt;/video&gt;
+        </div>
+
+        <div class="success">
+            ✅ <strong>优点：</strong>
+            <ul>
+                <li>直接从 GitHub LFS 服务器加载真实视频文件</li>
+                <li>不需要修改 Git 配置</li>
+                <li>支持大文件（最大 2GB）</li>
+                <li>自动使用 GitHub 的 CDN</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            ⚠️ <strong>注意：</strong>
+            <ul>
+                <li>需要文件已正确上传到 LFS 服务器</li>
+                <li>免费账户有带宽限制（1GB/月）</li>
+                <li>跨域可能需要配置</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="solution">
+        <h2>方案 2: 使用 GitHub Actions 自动转换</h2>
+        <p>创建自动化工作流，在推送时将 LFS 文件复制到普通文件：</p>
+        
+        <div class="code">
+# .github/workflows/convert-lfs.yml
+name: Convert LFS to Regular Files
+on:
+  push:
+    branches: [main]
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+      
+      - name: Copy videos to public folder
+        run: |
+          mkdir -p public/videos
+          cp -r videos/*.mp4 public/videos/
+      
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+        </div>
+
+        <div class="success">
+            ✅ <strong>优点：</strong>
+            <ul>
+                <li>完全自动化</li>
+                <li>LFS 文件自动转为普通文件部署</li>
+                <li>保持源码仓库干净</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="solution">
+        <h2>方案 3: 使用代理服务器</h2>
+        <p>创建一个简单的代理来获取 LFS 文件：</p>
+        
+        <div class="code">
+// Cloudflare Workers 示例
+addEventListener('fetch', event => {
+  event.respondWith(handleRequest(event.request))
+})
+
+async function handleRequest(request) {
+  const url = new URL(request.url)
+  const videoPath = url.pathname.replace('/videos/', '')
+  
+  const lfsUrl = `https://media.githubusercontent.com/media/QiqiTaotao666/QiqiTaotao666.github.io/main/videos/${videoPath}`
+  
+  const response = await fetch(lfsUrl)
+  return new Response(response.body, {
+    headers: {
+      'Content-Type': 'video/mp4',
+      'Access-Control-Allow-Origin': '*'
+    }
+  })
+}
+        </div>
+
+        <p>然后在网页中使用：</p>
+        <div class="code">
+&lt;video controls&gt;
+    &lt;source src="https://你的worker域名.workers.dev/videos/bodian.mp4" 
+            type="video/mp4"&gt;
+&lt;/video&gt;
+        </div>
+    </div>
+
+    <div class="solution">
+        <h2>方案 4: 使用 jsDelivr CDN（最简单）</h2>
+        <p>jsDelivr 会自动处理 LFS 文件：</p>
+        
+        <div class="code">
+&lt;video controls&gt;
+    &lt;source src="https://cdn.jsdelivr.net/gh/QiqiTaotao666/QiqiTaotao666.github.io@main/videos/bodian.mp4" 
+            type="video/mp4"&gt;
+&lt;/video&gt;
+        </div>
+
+        <div class="success">
+            ✅ <strong>优点：</strong>
+            <ul>
+                <li>完全免费</li>
+                <li>全球 CDN 加速</li>
+                <li>自动处理 LFS</li>
+                <li>无需配置</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            ⚠️ <strong>限制：</strong>
+            <ul>
+                <li>单文件最大 50MB</li>
+                <li>需要等待 CDN 缓存（首次加载可能慢）</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="solution">
+        <h2>方案 5: 混合方案（小文件直接托管，大文件用 LFS + Media URL）</h2>
+        <p>根据文件大小选择不同策略：</p>
+        
+        <div class="code">
+// 自动选择最佳 URL
+function getVideoUrl(filename, sizeMB) {
+    const baseUrl = 'videos/' + filename;
+    const lfsUrl = 'https://media.githubusercontent.com/media/QiqiTaotao666/QiqiTaotao666.github.io/main/videos/' + filename;
+    
+    // 小于 25MB: 使用直接路径
+    // 大于 25MB: 使用 LFS Media URL
+    return sizeMB < 25 ? baseUrl : lfsUrl;
+}
+
+// 使用示例
+const videoSrc = getVideoUrl('bodian.mp4', 1.2);
+        </div>
+    </div>
+
+    <h2>🧪 测试区域</h2>
+    
+    <div class="solution">
+        <h3>测试 1: GitHub Media URL</h3>
+        <video id="video1" controls preload="metadata">
+            <source src="https://media.githubusercontent.com/media/QiqiTaotao666/QiqiTaotao666.github.io/main/videos/bodian.mp4" 
+                    type="video/mp4">
+            您的浏览器不支持视频播放
+        </video>
+        <div id="status1" style="margin-top: 10px;">等待加载...</div>
+    </div>
+
+    <div class="solution">
+        <h3>测试 2: jsDelivr CDN</h3>
+        <video id="video2" controls preload="metadata">
+            <source src="https://cdn.jsdelivr.net/gh/QiqiTaotao666/QiqiTaotao666.github.io@main/videos/bodian.mp4" 
+                    type="video/mp4">
+            您的浏览器不支持视频播放
+        </video>
+        <div id="status2" style="margin-top: 10px;">等待加载...</div>
+    </div>
+
+    <div class="solution">
+        <h3>测试 3: 常规路径（已修复）</h3>
+        <video id="video3" controls preload="metadata">
+            <source src="videos/bodian.mp4" type="video/mp4">
+            您的浏览器不支持视频播放
+        </video>
+        <div id="status3" style="margin-top: 10px;">等待加载...</div>
+    </div>
+
+    <script>
+        function testVideo(videoId, statusId) {
+            const video = document.getElementById(videoId);
+            const status = document.getElementById(statusId);
+
+            video.addEventListener('loadedmetadata', () => {
+                status.innerHTML = `✅ 加载成功！尺寸: ${video.videoWidth}x${video.videoHeight}, 时长: ${video.duration.toFixed(2)}秒`;
+                status.style.color = '#4caf50';
+            });
+
+            video.addEventListener('error', () => {
+                const error = video.error;
+                let msg = '❌ 加载失败: ';
+                if (error) {
+                    switch(error.code) {
+                        case 2: msg += '网络错误'; break;
+                        case 3: msg += '解码失败'; break;
+                        case 4: msg += '格式不支持/文件不存在'; break;
+                        default: msg += '未知错误';
+                    }
+                }
+                status.innerHTML = msg;
+                status.style.color = '#f44336';
+            });
+
+            setTimeout(() => {
+                if (video.readyState === 0) {
+                    status.innerHTML = '⚠️ 加载超时（可能需要等待更长时间）';
+                    status.style.color = '#ff9800';
+                }
+            }, 8000);
+        }
+
+        testVideo('video1', 'status1');
+        testVideo('video2', 'status2');
+        testVideo('video3', 'status3');
+    </script>
+
+    <div style="margin-top: 50px; padding: 20px; background: #2a2a2a; border-radius: 8px;">
+        <h2>📊 方案对比</h2>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+                <tr style="background: #333;">
+                    <th style="padding: 10px; text-align: left; border: 1px solid #555;">方案</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid #555;">难度</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid #555;">速度</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid #555;">费用</th>
+                    <th style="padding: 10px; text-align: left; border: 1px solid #555;">文件大小限制</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #555;">GitHub Media URL</td>
+                    <td style="padding: 10px; border: 1px solid #555;">⭐ 简单</td>
+                    <td style="padding: 10px; border: 1px solid #555;">⭐⭐⭐ 快</td>
+                    <td style="padding: 10px; border: 1px solid #555;">免费（1GB/月）</td>
+                    <td style="padding: 10px; border: 1px solid #555;">2GB</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #555;">jsDelivr CDN</td>
+                    <td style="padding: 10px; border: 1px solid #555;">⭐ 最简单</td>
+                    <td style="padding: 10px; border: 1px solid #555;">⭐⭐⭐⭐ 很快</td>
+                    <td style="padding: 10px; border: 1px solid #555;">完全免费</td>
+                    <td style="padding: 10px; border: 1px solid #555;">50MB</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #555;">GitHub Actions</td>
+                    <td style="padding: 10px; border: 1px solid #555;">⭐⭐⭐ 复杂</td>
+                    <td style="padding: 10px; border: 1px solid #555;">⭐⭐⭐ 快</td>
+                    <td style="padding: 10px; border: 1px solid #555;">免费</td>
+                    <td style="padding: 10px; border: 1px solid #555;">100MB</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #555;">Cloudflare Workers</td>
+                    <td style="padding: 10px; border: 1px solid #555;">⭐⭐⭐⭐ 很复杂</td>
+                    <td style="padding: 10px; border: 1px solid #555;">⭐⭐⭐⭐⭐ 最快</td>
+                    <td style="padding: 10px; border: 1px solid #555;">免费（10万请求/天）</td>
+                    <td style="padding: 10px; border: 1px solid #555;">无限制</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #555;">直接托管（已采用）</td>
+                    <td style="padding: 10px; border: 1px solid #555;">⭐ 最简单</td>
+                    <td style="padding: 10px; border: 1px solid #555;">⭐⭐⭐ 快</td>
+                    <td style="padding: 10px; border: 1px solid #555;">免费</td>
+                    <td style="padding: 10px; border: 1px solid #555;">25MB (Cloudflare)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div style="margin-top: 30px; text-align: center;">
+        <a href="index.html" style="color: #00d9ff; text-decoration: none;">← 返回首页</a>
+    </div>
+</body>
+</html>
