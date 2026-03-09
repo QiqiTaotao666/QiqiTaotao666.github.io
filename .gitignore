@@ -5,3 +5,10 @@ videos/meimanche.mp4
 videos/media4/meimanche.mp4
 videos/media9/xieshizhiwu.mp4
 videos/xieshizhiwu.mp4
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
