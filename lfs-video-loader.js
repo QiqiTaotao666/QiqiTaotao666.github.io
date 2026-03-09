@@ -1,7 +1,7 @@
 /**
- * Git LFS 视频自动加载器 - jsDelivr CDN 加速版
- * 使用 jsDelivr CDN 加速 GitHub 仓库视频加载
- * 自动回退到 GitHub Media URL
+ * Git LFS 视频自动加载器 - 优化版
+ * 针对 Git LFS 大文件的专用加载策略
+ * 支持 GitHub Media URL + 多种加速方案
  */
 
 (function() {
@@ -14,37 +14,35 @@
         branch: 'main'
     };
     
-    // CDN 源配置（按优先级排序）
+    // LFS 文件专用 CDN 源配置（按优先级排序）
+    // 注意：jsDelivr 不支持 LFS 文件，会返回指针文件内容
     const CDN_SOURCES = [
-        // jsDelivr CDN - 全球加速，国内友好
-        {
-            name: 'jsDelivr',
-            getUrl: (path) => `https://cdn.jsdelivr.net/gh/${LFS_CONFIG.owner}/${LFS_CONFIG.repo}@${LFS_CONFIG.branch}/${path}`
-        },
-        // jsDelivr 备用域名
-        {
-            name: 'jsDelivr-fastly',
-            getUrl: (path) => `https://fastly.jsdelivr.net/gh/${LFS_CONFIG.owner}/${LFS_CONFIG.repo}@${LFS_CONFIG.branch}/${path}`
-        },
-        // GitHub Raw（备用）
-        {
-            name: 'GitHub-Raw',
-            getUrl: (path) => `https://raw.githubusercontent.com/${LFS_CONFIG.owner}/${LFS_CONFIG.repo}/${LFS_CONFIG.branch}/${path}`
-        },
-        // GitHub Media（LFS 文件）
+        // GitHub Media - LFS 文件的唯一正确来源
         {
             name: 'GitHub-Media',
-            getUrl: (path) => `https://media.githubusercontent.com/media/${LFS_CONFIG.owner}/${LFS_CONFIG.repo}/${LFS_CONFIG.branch}/${path}`
+            getUrl: (path) => `https://media.githubusercontent.com/media/${LFS_CONFIG.owner}/${LFS_CONFIG.repo}/${LFS_CONFIG.branch}/${path}`,
+            supportsLFS: true
+        },
+        // GitHub Raw - 仅适用于非 LFS 文件
+        {
+            name: 'GitHub-Raw',
+            getUrl: (path) => `https://raw.githubusercontent.com/${LFS_CONFIG.owner}/${LFS_CONFIG.repo}/${LFS_CONFIG.branch}/${path}`,
+            supportsLFS: false
+        },
+        // jsDelivr - 仅适用于非 LFS 文件（LFS 文件会返回指针）
+        {
+            name: 'jsDelivr',
+            getUrl: (path) => `https://cdn.jsdelivr.net/gh/${LFS_CONFIG.owner}/${LFS_CONFIG.repo}@${LFS_CONFIG.branch}/${path}`,
+            supportsLFS: false
         }
     ];
     
-    // 预连接到 CDN 服务器
+    // 预连接到服务器（加速首次请求）
     function addPreconnect() {
         const domains = [
-            'https://cdn.jsdelivr.net',
-            'https://fastly.jsdelivr.net',
+            'https://media.githubusercontent.com',  // LFS 文件主要来源
             'https://raw.githubusercontent.com',
-            'https://media.githubusercontent.com'
+            'https://cdn.jsdelivr.net'
         ];
         
         domains.forEach(domain => {
@@ -62,7 +60,7 @@
             document.head.appendChild(preconnect);
         });
         
-        console.log('🔗 已添加 CDN 预连接');
+        console.log('🔗 已添加预连接（GitHub Media 优先）');
     }
     
     // 检测是否在 GitHub Pages 上运行
@@ -141,9 +139,19 @@
         // 清空现有源
         sources.forEach(s => s.remove());
         
-        // 为每个原始视频添加多个 CDN 源
+        // 为 LFS 文件添加源（只使用支持 LFS 的源）
         originalSources.forEach(original => {
-            CDN_SOURCES.forEach(cdn => {
+            // 首先添加支持 LFS 的源（GitHub Media）
+            CDN_SOURCES.filter(cdn => cdn.supportsLFS).forEach(cdn => {
+                const newSource = document.createElement('source');
+                newSource.src = cdn.getUrl(original.path);
+                newSource.type = original.type;
+                newSource.dataset.cdnName = cdn.name;
+                video.appendChild(newSource);
+            });
+            
+            // 然后添加其他源作为备选（可能不支持 LFS）
+            CDN_SOURCES.filter(cdn => !cdn.supportsLFS).forEach(cdn => {
                 const newSource = document.createElement('source');
                 newSource.src = cdn.getUrl(original.path);
                 newSource.type = original.type;
@@ -159,7 +167,7 @@
             video.appendChild(localSource);
         });
         
-        console.log(`🎬 视频已添加 ${CDN_SOURCES.length + 1} 个源（含本地回退）`);
+        console.log(`🎬 LFS视频已配置 GitHub Media 优先加载`);
         
         // 当前尝试的源索引
         let currentSourceIndex = 0;
@@ -205,7 +213,7 @@
     function enhanceAllVideos() {
         const videos = document.querySelectorAll('video');
         videos.forEach(enhanceVideoElement);
-        console.log(`✅ 已增强 ${videos.length} 个视频元素（jsDelivr CDN 加速）`);
+        console.log(`✅ 已增强 ${videos.length} 个视频元素（LFS 专用）`);
     }
     
     // 初始化
@@ -239,5 +247,5 @@
         subtree: true
     });
     
-    console.log('🎥 Git LFS 视频加载器已初始化（jsDelivr CDN 加速版）');
+    console.log('🎥 Git LFS 视频加载器已初始化（GitHub Media 优先）');
 })();
