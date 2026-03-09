@@ -1,7 +1,8 @@
 # 排除超过 Cloudflare Pages 25MB 限制的大视频文件
-videos/dengat/boss战演示.mp4
-videos/media13/shijiechangjing.mp4
-videos/meimanche.mp4
-videos/media4/meimanche.mp4
-videos/media9/xieshizhiwu.mp4
-videos/xieshizhiwu.mp4
+# 注：使用 GitHub Pages + Git LFS，这些文件可以正常上传
+# videos/dengat/boss战演示.mp4
+# videos/media13/shijiechangjing.mp4
+# videos/meimanche.mp4
+# videos/media4/meimanche.mp4
+# videos/media9/xieshizhiwu.mp4
+# videos/xieshizhiwu.mp4
