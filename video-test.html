@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频播放测试页面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #00d9ff;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .test-section {
+            background: #2a2a2a;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #333;
+        }
+
+        .test-section h2 {
+            color: #00d9ff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .video-wrapper {
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .info-box {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .info-box.success {
+            border-left: 4px solid #4caf50;
+        }
+
+        .info-box.error {
+            border-left: 4px solid #f44336;
+        }
+
+        .info-box.warning {
+            border-left: 4px solid #ff9800;
+        }
+
+        .file-list {
+            background: #333;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .file-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .file-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+        }
+
+        .file-list li:last-child {
+            border-bottom: none;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+
+        .status.loading {
+            background: #ff9800;
+            color: #000;
+        }
+
+        .status.ready {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        .status.failed {
+            background: #f44336;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 视频播放诊断测试</h1>
+
+        <!-- 测试区域 1 -->
+        <div class="test-section">
+            <h2>测试 1: bodian.mp4</h2>
+            <div class="video-wrapper">
+                <video id="video1" controls preload="metadata">
+                    <source src="videos/bodian.mp4" type="video/mp4">
+                    您的浏览器不支持 HTML5 视频播放
+                </video>
+            </div>
+            <div class="info-box" id="info1">
+                <strong>状态：</strong><span class="status loading">加载中...</span>
+                <div id="details1" style="margin-top: 10px;"></div>
+            </div>
+        </div>
+
+        <!-- 测试区域 2 -->
+        <div class="test-section">
+            <h2>测试 2: 游戏剪辑宣传.mp4</h2>
+            <div class="video-wrapper">
+                <video id="video2" controls preload="metadata">
+                    <source src="videos/dengat/游戏剪辑宣传.mp4" type="video/mp4">
+                    您的浏览器不支持 HTML5 视频播放
+                </video>
+            </div>
+            <div class="info-box" id="info2">
+                <strong>状态：</strong><span class="status loading">加载中...</span>
+                <div id="details2" style="margin-top: 10px;"></div>
+            </div>
+        </div>
+
+        <!-- 测试区域 3 -->
+        <div class="test-section">
+            <h2>测试 3: boss战演示.mp4</h2>
+            <div class="video-wrapper">
+                <video id="video3" controls preload="metadata">
+                    <source src="videos/dengat/boss战演示.mp4" type="video/mp4">
+                    您的浏览器不支持 HTML5 视频播放
+                </video>
+            </div>
+            <div class="info-box" id="info3">
+                <strong>状态：</strong><span class="status loading">加载中...</span>
+                <div id="details3" style="margin-top: 10px;"></div>
+            </div>
+        </div>
+
+        <!-- 浏览器信息 -->
+        <div class="test-section">
+            <h2>📊 浏览器信息</h2>
+            <div class="file-list">
+                <ul>
+                    <li><strong>浏览器：</strong> <span id="browserInfo"></span></li>
+                    <li><strong>用户代理：</strong> <span id="userAgent" style="word-break: break-all;"></span></li>
+                    <li><strong>视频编解码器支持：</strong></li>
+                </ul>
+                <div id="codecSupport" style="margin-top: 10px; padding-left: 20px;"></div>
+            </div>
+        </div>
+
+        <!-- 返回按钮 -->
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="index.html" style="color: #00d9ff; text-decoration: none; font-size: 1.1em;">← 返回首页</a>
+        </div>
+    </div>
+
+    <script>
+        // 浏览器信息
+        document.getElementById('browserInfo').textContent = navigator.appName || 'Unknown';
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+
+        // 检测视频编解码器支持
+        const codecs = [
+            'video/mp4; codecs="avc1.42E01E"',
+            'video/mp4; codecs="avc1.4D401E"',
+            'video/mp4; codecs="avc1.640028"',
+            'video/webm; codecs="vp8"',
+            'video/webm; codecs="vp9"',
+            'video/ogg; codecs="theora"'
+        ];
+
+        const codecSupport = document.getElementById('codecSupport');
+        const video = document.createElement('video');
+        
+        codecs.forEach(codec => {
+            const support = video.canPlayType(codec);
+            const status = support === 'probably' ? '✅ 完全支持' : 
+                          support === 'maybe' ? '⚠️ 可能支持' : 
+                          '❌ 不支持';
+            codecSupport.innerHTML += `<div>${codec}: ${status}</div>`;
+        });
+
+        // 视频测试函数
+        function testVideo(videoId, infoId, detailsId) {
+            const video = document.getElementById(videoId);
+            const infoBox = document.getElementById(infoId);
+            const detailsDiv = document.getElementById(detailsId);
+            const statusSpan = infoBox.querySelector('.status');
+
+            let details = [];
+
+            // 监听各种事件
+            video.addEventListener('loadstart', () => {
+                details.push('⏳ 开始加载视频...');
+                updateDetails();
+            });
+
+            video.addEventListener('loadedmetadata', () => {
+                details.push(`✅ 元数据加载成功`);
+                details.push(`📐 尺寸: ${video.videoWidth}x${video.videoHeight}`);
+                details.push(`⏱️ 时长: ${video.duration.toFixed(2)}秒`);
+                updateDetails();
+            });
+
+            video.addEventListener('loadeddata', () => {
+                details.push('✅ 视频数据加载完成');
+                updateDetails();
+            });
+
+            video.addEventListener('canplay', () => {
+                details.push('✅ 视频可以播放');
+                statusSpan.textContent = '准备就绪';
+                statusSpan.className = 'status ready';
+                infoBox.className = 'info-box success';
+                updateDetails();
+            });
+
+            video.addEventListener('playing', () => {
+                details.push('▶️ 视频正在播放');
+                updateDetails();
+            });
+
+            video.addEventListener('error', (e) => {
+                const error = video.error;
+                let errorMsg = '未知错误';
+                
+                if (error) {
+                    switch(error.code) {
+                        case 1:
+                            errorMsg = 'MEDIA_ERR_ABORTED - 视频加载被中止';
+                            break;
+                        case 2:
+                            errorMsg = 'MEDIA_ERR_NETWORK - 网络错误，无法加载视频';
+                            break;
+                        case 3:
+                            errorMsg = 'MEDIA_ERR_DECODE - 视频解码失败';
+                            break;
+                        case 4:
+                            errorMsg = 'MEDIA_ERR_SRC_NOT_SUPPORTED - 视频格式不支持或文件不存在';
+                            break;
+                    }
+                }
+                
+                details.push(`❌ 错误: ${errorMsg}`);
+                details.push(`🔍 错误代码: ${error ? error.code : 'N/A'}`);
+                details.push(`📁 视频路径: ${video.querySelector('source').src}`);
+                
+                statusSpan.textContent = '加载失败';
+                statusSpan.className = 'status failed';
+                infoBox.className = 'info-box error';
+                updateDetails();
+            });
+
+            video.addEventListener('stalled', () => {
+                details.push('⚠️ 视频加载停滞');
+                updateDetails();
+            });
+
+            video.addEventListener('waiting', () => {
+                details.push('⏸️ 等待数据...');
+                updateDetails();
+            });
+
+            function updateDetails() {
+                detailsDiv.innerHTML = details.map(d => `<div>${d}</div>`).join('');
+            }
+
+            // 超时检测
+            setTimeout(() => {
+                if (video.readyState === 0) {
+                    details.push('⚠️ 超时：5秒后视频仍未开始加载');
+                    details.push('💡 建议：检查视频文件路径和网络连接');
+                    statusSpan.textContent = '加载超时';
+                    statusSpan.className = 'status failed';
+                    infoBox.className = 'info-box warning';
+                    updateDetails();
+                }
+            }, 5000);
+        }
+
+        // 测试所有视频
+        testVideo('video1', 'info1', 'details1');
+        testVideo('video2', 'info2', 'details2');
+        testVideo('video3', 'info3', 'details3');
+    </script>
+</body>
+</html>

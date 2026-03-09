@@ -246,9 +246,9 @@
         <div class="video-section">
             <h2>📹 游戏宣传片</h2>
             <div class="video-container">
-                <video controls autoplay loop muted>
+                <video controls loop muted playsinline preload="metadata">
                     <source src="videos/dengat/游戏剪辑宣传.mp4" type="video/mp4">
-                    您的浏览器不支持视频播放。
+                    您的浏览器不支持视频播放。请尝试使用Chrome、Firefox或Safari浏览器。
                 </video>
             </div>
         </div>
@@ -256,9 +256,9 @@
         <div class="video-section">
             <h2>🎮 Boss战演示</h2>
             <div class="video-container">
-                <video controls autoplay loop muted>
+                <video controls loop muted playsinline preload="metadata">
                     <source src="videos/dengat/boss战演示.mp4" type="video/mp4">
-                    您的浏览器不支持视频播放。
+                    您的浏览器不支持视频播放。请尝试使用Chrome、Firefox或Safari浏览器。
                 </video>
             </div>
         </div>
@@ -410,6 +410,42 @@
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+        });
+
+        // 视频加载错误处理
+        document.addEventListener('DOMContentLoaded', function() {
+            const videos = document.querySelectorAll('video');
+            
+            videos.forEach((video, index) => {
+                video.addEventListener('error', function(e) {
+                    console.error(`视频 ${index + 1} 加载失败:`, e);
+                    const error = video.error;
+                    let errorMessage = '视频加载失败';
+                    
+                    if (error) {
+                        switch(error.code) {
+                            case 1: errorMessage = '视频加载被中止'; break;
+                            case 2: errorMessage = '网络错误'; break;
+                            case 3: errorMessage = '视频解码失败'; break;
+                            case 4: errorMessage = '视频格式不支持或文件不存在'; break;
+                        }
+                    }
+                    
+                    const container = video.closest('.video-container');
+                    if (container) {
+                        container.innerHTML = `
+                            <div style="position: absolute; inset: 0; display: flex; flex-direction: column; 
+                                        align-items: center; justify-content: center; background: #1a1a1a; 
+                                        color: #ff6b6b; padding: 20px; text-align: center;">
+                                <div style="font-size: 3em; margin-bottom: 20px;">⚠️</div>
+                                <div style="font-size: 1.2em;">${errorMessage}</div>
+                            </div>
+                        `;
+                    }
+                });
+                
+                video.play().catch(err => console.log('自动播放被阻止'));
+            });
         });
     </script>
 </body>
